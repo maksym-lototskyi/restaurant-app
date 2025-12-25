@@ -81,7 +81,7 @@ public class RestaurantTableService {
     }
 
     public List<TableDetailsDto> getAllTablesForHall(Long hallId){
-        List<RestaurantTable> tables = tableTypeRepository.findAllByHallId(hallId);
+        List<RestaurantTable> tables = restaurantTableRepository.findAllByHallId(hallId);
 
         return tables.stream()
                 .map(RestaurantTableMapper::toTableDetailsDto)

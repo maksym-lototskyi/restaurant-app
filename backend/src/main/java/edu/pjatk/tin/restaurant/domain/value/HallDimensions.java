@@ -14,4 +14,8 @@ public record HallDimensions(
         ValidationUtils.requirePositiveNumber(width, "Width must be a positive number");
         ValidationUtils.requirePositiveNumber(length, "Length must be a positive number");
     }
+
+    public static HallDimensions of(int length, int width) {
+        return new HallDimensions(width, length);
+    }
 }

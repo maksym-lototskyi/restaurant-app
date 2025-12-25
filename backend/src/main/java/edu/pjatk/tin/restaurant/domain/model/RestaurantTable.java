@@ -1,6 +1,8 @@
 package edu.pjatk.tin.restaurant.domain.model;
 
+import edu.pjatk.tin.restaurant.domain.value.HallDimensions;
 import edu.pjatk.tin.restaurant.domain.value.TablePosition;
+import edu.pjatk.tin.restaurant.domain.value.TableTypeDimensions;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,11 +34,11 @@ public class RestaurantTable {
     RestaurantTable(String number, TablePosition position, TableType tableType, Hall hall) {
         ValidationUtils.requireNonNull(tableType, "Table type cannot be null");
         ValidationUtils.requireNonNull(hall, "Hall cannot be null");
+        validatePosition(position, tableType.getDimensions(), hall.getDimensions());
         this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
         this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
         this.tableType = tableType;
         this.hall = hall;
-        validatePosition(position);
     }
 
     public void changeNumber(String number) {
@@ -44,22 +46,22 @@ public class RestaurantTable {
     }
 
     public void move(TablePosition position) {
+        validatePosition(position, this.tableType.getDimensions(), this.hall.getDimensions());
         this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
-        validatePosition(position);
     }
 
-    private void validatePosition(TablePosition position) {
+    public static void validatePosition(TablePosition position, TableTypeDimensions dimensions, HallDimensions hallDimensions) {
         switch (position.rotation()){
             case DEGREE_0, DEGREE_180 -> {
-                ValidationUtils.requireValueInRange(position.positionX(), 0, hall.getDimensions().length() - tableType.getDimensions().length(),
+                ValidationUtils.requireValueInRange(position.positionX(), 0, hallDimensions.length() - dimensions.length(),
                         "Table position X must be within hall dimensions");
-                ValidationUtils.requireValueInRange(position.positionY(), 0, hall.getDimensions().width() - tableType.getDimensions().width(),
+                ValidationUtils.requireValueInRange(position.positionY(), 0, hallDimensions.width() - dimensions.width(),
                         "Table position Y must be within hall dimensions");
             }
             case DEGREE_90, DEGREE_270 -> {
-                ValidationUtils.requireValueInRange(position.positionX(), 0, hall.getDimensions().length() - tableType.getDimensions().width(),
+                ValidationUtils.requireValueInRange(position.positionX(), 0, hallDimensions.length() - dimensions.width(),
                         "Table position X must be within hall dimensions");
-                ValidationUtils.requireValueInRange(position.positionY(), 0, hall.getDimensions().width() - tableType.getDimensions().length(),
+                ValidationUtils.requireValueInRange(position.positionY(), 0, hallDimensions.width() - dimensions.length(),
                         "Table position Y must be within hall dimensions");
             }
         }
