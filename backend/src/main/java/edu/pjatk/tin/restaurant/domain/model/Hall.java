@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.domain;
+package edu.pjatk.tin.restaurant.domain.model;
 
 import edu.pjatk.tin.restaurant.domain.value.HallDimensions;
 import edu.pjatk.tin.restaurant.domain.value.TablePosition;

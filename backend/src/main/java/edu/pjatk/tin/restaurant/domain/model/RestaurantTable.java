@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.domain;
+package edu.pjatk.tin.restaurant.domain.model;
 
 import edu.pjatk.tin.restaurant.domain.value.TablePosition;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
@@ -7,7 +7,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
 public class RestaurantTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,9 @@ public class RestaurantTable {
     @ManyToOne
     @JoinColumn(name = "hall_id", nullable = false)
     private Hall hall;
+
+    protected RestaurantTable() {
+    }
 
     RestaurantTable(String number, TablePosition position, TableType tableType, Hall hall) {
         ValidationUtils.requireNonNull(tableType, "Table type cannot be null");

@@ -37,5 +37,17 @@ public record TablePosition(
         public int getDegree() {
             return degree;
         }
+        public static Rotation fromDegree(int degree) {
+            for (Rotation rotation : Rotation.values()) {
+                if (rotation.degree == degree) {
+                    return rotation;
+                }
+            }
+            throw new IllegalArgumentException("Invalid degree: " + degree);
+        }
+    }
+
+    public static TablePosition of(int positionX, int positionY, Rotation rotation) {
+        return new TablePosition(positionX, positionY, rotation);
     }
 }
