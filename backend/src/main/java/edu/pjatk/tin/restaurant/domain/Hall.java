@@ -1,6 +1,8 @@
 package edu.pjatk.tin.restaurant.domain;
 
-import edu.pjatk.tin.restaurant.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.domain.value.HallDimensions;
+import edu.pjatk.tin.restaurant.domain.value.TablePosition;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Hall {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Getter
@@ -22,26 +25,25 @@ public class Hall {
     private HallDimensions dimensions;
 
     @OneToMany(mappedBy = "hall", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<RestaurantTable> tables = new HashSet<>();
+    private final Set<RestaurantTable> tables = new HashSet<>();
 
-    public Hall(String name, HallDimensions dimensions, Set<RestaurantTable> tables) {
+    public Hall(String name, HallDimensions dimensions) {
         this.name = ValidationUtils.requireNonBlank(name, "Hall name cannot be null or blank");
         this.dimensions = ValidationUtils.requireNonNull(dimensions, "Hall dimensions cannot be null");
-        this.tables = tables;
     }
 
-    public void setName(String name) {
+    public void changeName(String name) {
         this.name = ValidationUtils.requireNonBlank(name, "Hall name cannot be null or blank");
     }
 
-    public void setDimensions(HallDimensions dimensions) {
+    public void resize(HallDimensions dimensions) {
         this.dimensions = ValidationUtils.requireNonNull(dimensions, "Hall dimensions cannot be null");
     }
 
-    public void addTable(RestaurantTable table){
-        ValidationUtils.requireNonNull(table, "table cannot be null");
+    public RestaurantTable addTable(String number, TablePosition position, TableType tableType){
+        RestaurantTable table = new RestaurantTable(number, position, tableType, this);
         this.tables.add(table);
-        table.setHall(this);
+        return table;
     }
 
     public Set<RestaurantTable> getTables() {

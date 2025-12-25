@@ -1,6 +1,8 @@
 package edu.pjatk.tin.restaurant.domain;
 
-import edu.pjatk.tin.restaurant.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.domain.value.ReservationStatus;
+import edu.pjatk.tin.restaurant.domain.value.TimeSlot;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,29 +12,49 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Reservation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Embedded
     private TimeSlot timeSlot;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne
-    private User customer;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private ReservationStatus status = ReservationStatus.CONFIRMED;
 
-    @JoinColumn(name = "table_id")
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private RestaurantUser customer;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "table_id", nullable = false)
     private RestaurantTable table;
 
-    public Reservation(TimeSlot timeSlot, User customer, RestaurantTable table) {
+
+    public Reservation(TimeSlot timeSlot, RestaurantUser customer, RestaurantTable table) {
         this.timeSlot = ValidationUtils.requireNonNull(timeSlot, "Time slot cannot be null");
         this.customer = ValidationUtils.requireNonNull(customer, "Customer cannot be null");
         this.table = ValidationUtils.requireNonNull(table, "Table cannot be null");
     }
 
-    public void setTimeSlot(TimeSlot timeSlot) {
+    public void reschedule(TimeSlot timeSlot) {
         this.timeSlot = ValidationUtils.requireNonNull(timeSlot, "Time slot cannot be null");
     }
 
-    void setCustomer(User customer) {
+    public void cancel() {
+        if(this.status == ReservationStatus.CANCELLED) {
+            throw new IllegalStateException("Reservation is already cancelled");
+        }
+        this.status = ReservationStatus.CANCELLED;
+    }
+
+    public void markAsNoShow() {
+        if(this.status != ReservationStatus.CONFIRMED) {
+            throw new IllegalStateException("Only confirmed reservations can be marked as no-show");
+        }
+        this.status = ReservationStatus.NO_SHOW;
+    }
+
+    void setCustomer(RestaurantUser customer) {
         this.customer = customer;
     }
 }

@@ -1,14 +1,16 @@
 package edu.pjatk.tin.restaurant.domain;
 
-import edu.pjatk.tin.restaurant.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.domain.value.TablePosition;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public final class RestaurantTable {
+public class RestaurantTable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "table_number", nullable = false)
@@ -25,34 +27,39 @@ public final class RestaurantTable {
     @JoinColumn(name = "hall_id", nullable = false)
     private Hall hall;
 
-    public RestaurantTable(String number, TablePosition position, TableType tableType, Hall hall) {
+    RestaurantTable(String number, TablePosition position, TableType tableType, Hall hall) {
+        ValidationUtils.requireNonNull(tableType, "Table type cannot be null");
+        ValidationUtils.requireNonNull(hall, "Hall cannot be null");
         this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
         this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
-        this.tableType = ValidationUtils.requireNonNull(tableType, "Table type cannot be null");
-        this.hall = ValidationUtils.requireNonNull(hall, "Hall cannot be null");
-        ValidationUtils.requireValueInRange(position.positionX(), 0, hall.getDimensions().width() - position.positionX(),
-                "Table position X must be within hall dimensions");
-        ValidationUtils.requireValueInRange(position.positionY(), 0, hall.getDimensions().length() - position.positionY(),
-                "Table position Y must be within hall dimensions");
-    }
-
-    public void setNumber(String number) {
-        this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
-    }
-
-    public void setPosition(TablePosition position) {
-        this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
-        ValidationUtils.requireValueInRange(position.positionX(), 0, hall.getDimensions().width() - position.positionX(),
-                "Table position X must be within hall dimensions");
-        ValidationUtils.requireValueInRange(position.positionY(), 0, hall.getDimensions().length() - position.positionY(),
-                "Table position Y must be within hall dimensions");
-    }
-
-    void setHall(Hall hall) {
-        this.hall = hall;
-    }
-
-    void setTableType(TableType tableType) {
         this.tableType = tableType;
+        this.hall = hall;
+        validatePosition(position);
+    }
+
+    public void changeNumber(String number) {
+        this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
+    }
+
+    public void move(TablePosition position) {
+        this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
+        validatePosition(position);
+    }
+
+    private void validatePosition(TablePosition position) {
+        switch (position.rotation()){
+            case DEGREE_0, DEGREE_180 -> {
+                ValidationUtils.requireValueInRange(position.positionX(), 0, hall.getDimensions().length() - tableType.getDimensions().length(),
+                        "Table position X must be within hall dimensions");
+                ValidationUtils.requireValueInRange(position.positionY(), 0, hall.getDimensions().width() - tableType.getDimensions().width(),
+                        "Table position Y must be within hall dimensions");
+            }
+            case DEGREE_90, DEGREE_270 -> {
+                ValidationUtils.requireValueInRange(position.positionX(), 0, hall.getDimensions().length() - tableType.getDimensions().width(),
+                        "Table position X must be within hall dimensions");
+                ValidationUtils.requireValueInRange(position.positionY(), 0, hall.getDimensions().width() - tableType.getDimensions().length(),
+                        "Table position Y must be within hall dimensions");
+            }
+        }
     }
 }

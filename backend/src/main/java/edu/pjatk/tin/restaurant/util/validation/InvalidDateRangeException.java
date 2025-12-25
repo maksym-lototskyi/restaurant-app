@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.validation;
+package edu.pjatk.tin.restaurant.util.validation;
 
 public class InvalidDateRangeException extends RuntimeException {
     public InvalidDateRangeException(String message) {

@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS hall (
 CREATE TABLE IF NOT EXISTS table_type(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
+    number_of_seats INTEGER NOT NULL,
     width INTEGER NOT NULL,
     length INTEGER NOT NULL
 )ENGINE=InnoDB;
@@ -19,7 +20,7 @@ CREATE TABLE IF NOT EXISTS restaurant_table (
     hall_id BIGINT NOT NULL,
     position_x INTEGER NOT NULL,
     position_y INTEGER NOT NULL,
-    rotation INTEGER NOT NULL,
+    rotation VARCHAR(50) NOT NULL,
     CONSTRAINT fk_hall_table
         FOREIGN KEY (hall_id) REFERENCES hall(id)
         ON DELETE CASCADE,
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS reservation(
     table_id BIGINT NOT NULL,
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
+    status VARCHAR(50) NOT NULL,
     CONSTRAINT user_reservation_fk
         FOREIGN KEY (user_id) REFERENCES restaurant_user(id),
     CONSTRAINT table_reservation_fk

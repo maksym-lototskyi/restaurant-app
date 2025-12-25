@@ -1,6 +1,6 @@
-package edu.pjatk.tin.restaurant.domain;
+package edu.pjatk.tin.restaurant.domain.value;
 
-import edu.pjatk.tin.restaurant.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
