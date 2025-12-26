@@ -15,4 +15,8 @@ public record RestaurantTableId(UUID value) implements Serializable {
     public static RestaurantTableId generate() {
         return new RestaurantTableId(UUID.randomUUID());
     }
+
+    public static RestaurantTableId of(UUID tableId) {
+        return new RestaurantTableId(tableId);
+    }
 }

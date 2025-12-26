@@ -1,6 +1,8 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
+import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
 import edu.pjatk.tin.restaurant.domain.hall.HallId;
+import edu.pjatk.tin.restaurant.domain.table_type.TableTypeDimensions;
 import edu.pjatk.tin.restaurant.domain.table_type.TableTypeId;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
@@ -29,8 +31,8 @@ public class RestaurantTable {
     }
 
     public RestaurantTable(RestaurantTableId tableId, String number, TablePosition position, TableTypeId tableTypeId, HallId hallId) {
-        ValidationUtils.requireNonNull(tableTypeId, "Table type id cannot be null");
-        ValidationUtils.requireNonNull(hallId, "Hall id cannot be null");
+        ValidationUtils.requireNonNull(tableTypeId, "Table type value cannot be null");
+        ValidationUtils.requireNonNull(hallId, "Hall value cannot be null");
         ValidationUtils.requireNonNull(tableId, "TableId cannot be null");
         this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
         this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");

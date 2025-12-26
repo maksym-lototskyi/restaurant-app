@@ -14,4 +14,6 @@ public interface RestaurantTableRepository extends JpaRepository<RestaurantTable
     List<RestaurantTable> findAllByHallId(HallId hallId);
 
     boolean existsByTableTypeId(TableTypeId tableTypeId);
+    boolean existsByHallId(HallId hallId);
+    boolean existsByHallIdAndNumber(HallId hallId, String number);
 }
