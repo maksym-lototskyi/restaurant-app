@@ -1,35 +1,25 @@
 package edu.pjatk.tin.restaurant.domain.hall;
-
-import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTable;
-import edu.pjatk.tin.restaurant.domain.table_type.TableType;
-import edu.pjatk.tin.restaurant.domain.restaurant_table.TablePosition;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Hall {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    private Long id;
+    @EmbeddedId
+    private HallId id;
 
-    @Getter
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
-    @Getter
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "name", nullable = false, unique = true))
+    private HallName name;
+
     @Column(name = "floor_number", nullable = false)
     private int floorNumber;
 
-    @Getter
     @Embedded
     private HallDimensions dimensions;
 
-    public Hall(String name, HallDimensions dimensions, int floorNumber) {
-        this.name = ValidationUtils.requireNonBlank(name, "Hall name cannot be null or blank");
+    public Hall(HallId id, HallName name, HallDimensions dimensions, int floorNumber) {
+        this.id = ValidationUtils.requireNonNull(id, "Hall ID cannot be null");
+        this.name = ValidationUtils.requireNonNull(name, "Hall name cannot be null");
         this.dimensions = ValidationUtils.requireNonNull(dimensions, "Hall dimensions cannot be null");
         this.floorNumber = ValidationUtils.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
     }
@@ -37,8 +27,12 @@ public class Hall {
     protected Hall() {
     }
 
-    public void changeName(String name) {
-        this.name = ValidationUtils.requireNonBlank(name, "Hall name cannot be null or blank");
+    public static Hall create(HallName name, HallDimensions dimensions, int floorNumber) {
+        return new Hall(HallId.generate(), name, dimensions, floorNumber);
+    }
+
+    public void changeName(HallName name) {
+        this.name = ValidationUtils.requireNonNull(name, "Hall name cannot be null");
     }
 
     public void resize(HallDimensions dimensions) {
@@ -47,5 +41,21 @@ public class Hall {
 
     public void changeFloorNumber(int floorNumber) {
         this.floorNumber = ValidationUtils.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
+    }
+
+    public HallId getId() {
+        return id;
+    }
+
+    public HallName getName() {
+        return name;
+    }
+
+    public int getFloorNumber() {
+        return floorNumber;
+    }
+
+    public HallDimensions getDimensions() {
+        return dimensions;
     }
 }

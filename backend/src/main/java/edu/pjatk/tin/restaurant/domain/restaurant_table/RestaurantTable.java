@@ -1,19 +1,15 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
-import edu.pjatk.tin.restaurant.domain.hall.Hall;
-import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
-import edu.pjatk.tin.restaurant.domain.table_type.TableType;
-import edu.pjatk.tin.restaurant.domain.table_type.TableTypeDimensions;
+import edu.pjatk.tin.restaurant.domain.hall.HallId;
+import edu.pjatk.tin.restaurant.domain.table_type.TableTypeId;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Getter
 public class RestaurantTable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    @AttributeOverride(name = "value", column = @Column(name = "id"))
+    private RestaurantTableId id;
 
     @Column(name = "table_number", nullable = false)
     private String number;
@@ -21,25 +17,30 @@ public class RestaurantTable {
     @Embedded
     private TablePosition position;
 
-    @ManyToOne
-    @JoinColumn(name = "table_type_id", nullable = false)
-    private TableType tableType;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "table_type_id", nullable = false))
+    private TableTypeId tableTypeId;
 
-    @ManyToOne
-    @JoinColumn(name = "hall_id", nullable = false)
-    private Hall hall;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "hall_id", nullable = false))
+    private HallId hallId;
 
     protected RestaurantTable() {
     }
 
-    public RestaurantTable(String number, TablePosition position, TableType tableType, Hall hall) {
-        ValidationUtils.requireNonNull(tableType, "Table type cannot be null");
-        ValidationUtils.requireNonNull(hall, "Hall cannot be null");
-        validatePosition(position, tableType.getDimensions(), hall.getDimensions());
+    public RestaurantTable(RestaurantTableId tableId, String number, TablePosition position, TableTypeId tableTypeId, HallId hallId) {
+        ValidationUtils.requireNonNull(tableTypeId, "Table type id cannot be null");
+        ValidationUtils.requireNonNull(hallId, "Hall id cannot be null");
+        ValidationUtils.requireNonNull(tableId, "TableId cannot be null");
         this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
         this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
-        this.tableType = tableType;
-        this.hall = hall;
+        this.tableTypeId = tableTypeId;
+        this.hallId = hallId;
+        this.id = tableId;
+    }
+
+    public static RestaurantTable create(String number, TablePosition position, TableTypeId tableTypeId, HallId hallId) {
+        return new RestaurantTable(RestaurantTableId.generate(), number, position, tableTypeId, hallId);
     }
 
     public void changeNumber(String number) {
@@ -47,24 +48,26 @@ public class RestaurantTable {
     }
 
     public void move(TablePosition position) {
-        validatePosition(position, this.tableType.getDimensions(), this.hall.getDimensions());
         this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
     }
 
-    public static void validatePosition(TablePosition position, TableTypeDimensions dimensions, HallDimensions hallDimensions) {
-        switch (position.rotation()){
-            case DEGREE_0, DEGREE_180 -> {
-                ValidationUtils.requireValueInRange(position.positionX(), 0, hallDimensions.length() - dimensions.length(),
-                        "Table position X must be within hall dimensions");
-                ValidationUtils.requireValueInRange(position.positionY(), 0, hallDimensions.width() - dimensions.width(),
-                        "Table position Y must be within hall dimensions");
-            }
-            case DEGREE_90, DEGREE_270 -> {
-                ValidationUtils.requireValueInRange(position.positionX(), 0, hallDimensions.length() - dimensions.width(),
-                        "Table position X must be within hall dimensions");
-                ValidationUtils.requireValueInRange(position.positionY(), 0, hallDimensions.width() - dimensions.length(),
-                        "Table position Y must be within hall dimensions");
-            }
-        }
+    public RestaurantTableId getId() {
+        return id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public TablePosition getPosition() {
+        return position;
+    }
+
+    public TableTypeId getTableTypeId() {
+        return tableTypeId;
+    }
+
+    public HallId getHallId() {
+        return hallId;
     }
 }
