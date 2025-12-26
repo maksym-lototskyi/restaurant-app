@@ -1,5 +1,5 @@
 package edu.pjatk.tin.restaurant.domain.hall;
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,10 +19,10 @@ public class Hall {
     private HallDimensions dimensions;
 
     public Hall(HallId id, HallName name, HallDimensions dimensions, int floorNumber) {
-        this.id = ValidationUtils.requireNonNull(id, "Hall ID cannot be null");
-        this.name = ValidationUtils.requireNonNull(name, "Hall name cannot be null");
-        this.dimensions = ValidationUtils.requireNonNull(dimensions, "Hall dimensions cannot be null");
-        this.floorNumber = ValidationUtils.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
+        this.id = ValidationUtil.requireNonNull(id, "Hall ID cannot be null");
+        this.name = ValidationUtil.requireNonNull(name, "Hall name cannot be null");
+        this.dimensions = ValidationUtil.requireNonNull(dimensions, "Hall dimensions cannot be null");
+        this.floorNumber = ValidationUtil.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
     }
 
     protected Hall() {
@@ -33,15 +33,15 @@ public class Hall {
     }
 
     public void changeName(HallName name) {
-        this.name = ValidationUtils.requireNonNull(name, "Hall name cannot be null");
+        this.name = ValidationUtil.requireNonNull(name, "Hall name cannot be null");
     }
 
     public void resize(HallDimensions dimensions) {
-        this.dimensions = ValidationUtils.requireNonNull(dimensions, "Hall dimensions cannot be null");
+        this.dimensions = ValidationUtil.requireNonNull(dimensions, "Hall dimensions cannot be null");
     }
 
     public void changeFloorNumber(int floorNumber) {
-        this.floorNumber = ValidationUtils.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
+        this.floorNumber = ValidationUtil.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
     }
 
     public HallId getId() {

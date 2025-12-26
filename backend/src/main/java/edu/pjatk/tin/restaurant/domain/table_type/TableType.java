@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.table_type;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,10 +19,10 @@ public class TableType {
     private TableTypeDimensions dimensions;
 
     public TableType(TableTypeId id, String name, int numberOfSeats, TableTypeDimensions dimensions) {
-        this.id = ValidationUtils.requireNonNull(id, "Table type ID cannot be null");
-        this.name = ValidationUtils.requireNonBlank(name, "Table type name cannot be null or blank");
-        this.dimensions = ValidationUtils.requireNonNull(dimensions, "Table type dimensions cannot be null");
-        this.numberOfSeats = ValidationUtils.requirePositiveNumber(numberOfSeats, "Number of seats must be a positive number");
+        this.id = ValidationUtil.requireNonNull(id, "Table type ID cannot be null");
+        this.name = ValidationUtil.requireNonBlank(name, "Table type name cannot be null or blank");
+        this.dimensions = ValidationUtil.requireNonNull(dimensions, "Table type dimensions cannot be null");
+        this.numberOfSeats = ValidationUtil.requirePositiveNumber(numberOfSeats, "Number of seats must be a positive number");
     }
 
     protected TableType() {
@@ -33,15 +33,15 @@ public class TableType {
     }
 
     public void rename(String name) {
-        this.name = ValidationUtils.requireNonBlank(name, "Table type name cannot be null or blank");
+        this.name = ValidationUtil.requireNonBlank(name, "Table type name cannot be null or blank");
     }
 
     public void resize(TableTypeDimensions dimensions) {
-        this.dimensions = ValidationUtils.requireNonNull(dimensions, "Table type dimensions cannot be null");
+        this.dimensions = ValidationUtil.requireNonNull(dimensions, "Table type dimensions cannot be null");
     }
 
     public void changeNumberOfSeats(int numberOfSeats) {
-        this.numberOfSeats = ValidationUtils.requirePositiveNumber(numberOfSeats, "Number of seats must be a positive number");
+        this.numberOfSeats = ValidationUtil.requirePositiveNumber(numberOfSeats, "Number of seats must be a positive number");
     }
 
     public TableTypeId getId() {

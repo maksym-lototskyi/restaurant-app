@@ -1,7 +1,7 @@
 package edu.pjatk.tin.restaurant.domain.reservation;
 
 import edu.pjatk.tin.restaurant.util.validation.InvalidDateRangeException;
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -15,11 +15,15 @@ public record TimeSlot(
         LocalDateTime endTime
 ) {
     public TimeSlot {
-        ValidationUtils.requireNonNull(startTime, "Start time cannot be null");
-        ValidationUtils.requireNonNull(endTime, "End time cannot be null");
+        ValidationUtil.requireNonNull(startTime, "Start time cannot be null");
+        ValidationUtil.requireNonNull(endTime, "End time cannot be null");
 
         if (endTime.isBefore(startTime) || endTime.isEqual(startTime)) {
             throw new InvalidDateRangeException("End time must be after start time");
         }
+    }
+
+    public static TimeSlot of(LocalDateTime startTime, LocalDateTime endTime) {
+        return new TimeSlot(startTime, endTime);
     }
 }

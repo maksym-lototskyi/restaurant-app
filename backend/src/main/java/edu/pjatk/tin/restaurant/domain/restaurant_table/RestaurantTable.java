@@ -1,10 +1,8 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
-import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
 import edu.pjatk.tin.restaurant.domain.hall.HallId;
-import edu.pjatk.tin.restaurant.domain.table_type.TableTypeDimensions;
 import edu.pjatk.tin.restaurant.domain.table_type.TableTypeId;
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.*;
 
 @Entity
@@ -31,11 +29,11 @@ public class RestaurantTable {
     }
 
     public RestaurantTable(RestaurantTableId tableId, String number, TablePosition position, TableTypeId tableTypeId, HallId hallId) {
-        ValidationUtils.requireNonNull(tableTypeId, "Table type value cannot be null");
-        ValidationUtils.requireNonNull(hallId, "Hall value cannot be null");
-        ValidationUtils.requireNonNull(tableId, "TableId cannot be null");
-        this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
-        this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
+        ValidationUtil.requireNonNull(tableTypeId, "Table type value cannot be null");
+        ValidationUtil.requireNonNull(hallId, "Hall value cannot be null");
+        ValidationUtil.requireNonNull(tableId, "TableId cannot be null");
+        this.number = ValidationUtil.requireNonBlank(number, "Table number cannot be null or blank");
+        this.position = ValidationUtil.requireNonNull(position, "Table position cannot be null");
         this.tableTypeId = tableTypeId;
         this.hallId = hallId;
         this.id = tableId;
@@ -46,11 +44,11 @@ public class RestaurantTable {
     }
 
     public void changeNumber(String number) {
-        this.number = ValidationUtils.requireNonBlank(number, "Table number cannot be null or blank");
+        this.number = ValidationUtil.requireNonBlank(number, "Table number cannot be null or blank");
     }
 
     public void move(TablePosition position) {
-        this.position = ValidationUtils.requireNonNull(position, "Table position cannot be null");
+        this.position = ValidationUtil.requireNonNull(position, "Table position cannot be null");
     }
 
     public RestaurantTableId getId() {

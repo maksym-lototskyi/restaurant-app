@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -17,9 +17,9 @@ public record TablePosition(
         Rotation rotation
 ) {
     public TablePosition {
-        ValidationUtils.requirePositiveNumber(positionX, "Position X must be a positive number");
-        ValidationUtils.requirePositiveNumber(positionY, "Position Y must be a positive number");
-        ValidationUtils.requireNonNull(rotation, "Rotation cannot be null");
+        ValidationUtil.requirePositiveNumber(positionX, "Position X must be a positive number");
+        ValidationUtil.requirePositiveNumber(positionY, "Position Y must be a positive number");
+        ValidationUtil.requireNonNull(rotation, "Rotation cannot be null");
     }
 
     public enum Rotation {

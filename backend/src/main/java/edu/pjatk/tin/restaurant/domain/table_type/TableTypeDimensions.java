@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.table_type;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -12,8 +12,8 @@ public record TableTypeDimensions(
         int length
 ) {
     public TableTypeDimensions {
-        ValidationUtils.requirePositiveNumber(width, "Width must be a positive number");
-        ValidationUtils.requirePositiveNumber(length, "Length must be a positive number");
+        ValidationUtil.requirePositiveNumber(width, "Width must be a positive number");
+        ValidationUtil.requirePositiveNumber(length, "Length must be a positive number");
     }
 
     public static TableTypeDimensions of(int width, int length) {

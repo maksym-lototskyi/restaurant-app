@@ -1,13 +1,13 @@
 package edu.pjatk.tin.restaurant.domain.hall;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 
 import java.io.Serializable;
 import java.util.UUID;
 
 public record HallId (UUID value) implements Serializable {
     public HallId {
-        ValidationUtils.requireNonNull(value, "HallId value cannot be null");
+        ValidationUtil.requireNonNull(value, "HallId value cannot be null");
     }
 
     public static HallId generate() {

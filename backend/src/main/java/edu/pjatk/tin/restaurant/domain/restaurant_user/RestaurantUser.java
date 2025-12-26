@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_user;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,11 +23,11 @@ public class RestaurantUser {
 
 
     public RestaurantUser(RestaurantUserId id, String firstName, String lastName, String email, String password) {
-        this.id = ValidationUtils.requireNonNull(id, "User ID cannot be null");
-        this.firstName = ValidationUtils.requireNonBlank(firstName, "First name cannot be null or blank");
-        this.lastName = ValidationUtils.requireNonBlank(lastName, "Last name cannot be null or blank");
-        this.email = ValidationUtils.requireCorrectStringRegex(email, "Email", "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");;
-        this.password = ValidationUtils.requireNonBlank(password, "Password cannot be null or blank");
+        this.id = ValidationUtil.requireNonNull(id, "User ID cannot be null");
+        this.firstName = ValidationUtil.requireNonBlank(firstName, "First name cannot be null or blank");
+        this.lastName = ValidationUtil.requireNonBlank(lastName, "Last name cannot be null or blank");
+        this.email = ValidationUtil.requireCorrectStringRegex(email, "Email", "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");;
+        this.password = ValidationUtil.requireNonBlank(password, "Password cannot be null or blank");
     }
 
     protected RestaurantUser() {
@@ -38,19 +38,19 @@ public class RestaurantUser {
     }
 
     public void changeFirstName(String firstName) {
-        this.firstName = ValidationUtils.requireNonBlank(firstName, "First name cannot be null or blank");
+        this.firstName = ValidationUtil.requireNonBlank(firstName, "First name cannot be null or blank");
     }
 
     public void changeLastName(String lastName) {
-        this.lastName = ValidationUtils.requireNonBlank(lastName, "Last name cannot be null or blank");
+        this.lastName = ValidationUtil.requireNonBlank(lastName, "Last name cannot be null or blank");
     }
 
     public void changeEmail(String email) {
-        this.email = ValidationUtils.requireCorrectStringRegex(email, "Email", "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");;
+        this.email = ValidationUtil.requireCorrectStringRegex(email, "Email", "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");;
     }
 
     public void changePassword(String password) {
-        this.password = ValidationUtils.requireNonBlank(password, "Password cannot be null or blank");
+        this.password = ValidationUtil.requireNonBlank(password, "Password cannot be null or blank");
     }
 
     public RestaurantUserId getId() {

@@ -2,9 +2,9 @@ package edu.pjatk.tin.restaurant.web.controller;
 
 import edu.pjatk.tin.restaurant.domain.table_type.TableTypeDimensions;
 import edu.pjatk.tin.restaurant.domain.table_type.TableTypeId;
-import edu.pjatk.tin.restaurant.use_cases.table_type.*;
-import edu.pjatk.tin.restaurant.web.dtos.table_type.CreateTableTypeDto;
-import edu.pjatk.tin.restaurant.web.dtos.table_type.UpdateTableTypeDto;
+import edu.pjatk.tin.restaurant.application.table_type.*;
+import edu.pjatk.tin.restaurant.web.dtos.request.table_type.CreateTableTypeDto;
+import edu.pjatk.tin.restaurant.web.dtos.request.table_type.UpdateTableTypeDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

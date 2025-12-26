@@ -2,7 +2,7 @@ package edu.pjatk.tin.restaurant.domain.reservation;
 
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
+import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +17,9 @@ public class Reservation {
     @Column(name = "status", nullable = false)
     private ReservationStatus status = ReservationStatus.CONFIRMED;
 
+    @Column(name = "number_of_guests", nullable = false)
+    private int numberOfGuests;
+
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "customer_id", nullable = false))
     private RestaurantUserId customerId;
@@ -25,22 +28,23 @@ public class Reservation {
     @AttributeOverride(name = "value", column = @Column(name = "table_id", nullable = false))
     private RestaurantTableId tableId;
 
-    public Reservation(ReservationId id, TimeSlot timeSlot, RestaurantUserId customerId, RestaurantTableId tableId) {
-        this.id = ValidationUtils.requireNonNull(id, "Reservation value cannot be null");
-        this.timeSlot = ValidationUtils.requireNonNull(timeSlot, "Time slot cannot be null");
-        this.customerId = ValidationUtils.requireNonNull(customerId, "Customer value cannot be null");
-        this.tableId = ValidationUtils.requireNonNull(tableId, "Table value cannot be null");
+    public Reservation(ReservationId id, TimeSlot timeSlot, RestaurantUserId customerId, RestaurantTableId tableId, int numberOfGuests) {
+        this.id = ValidationUtil.requireNonNull(id, "Reservation value cannot be null");
+        this.timeSlot = ValidationUtil.requireNonNull(timeSlot, "Time slot cannot be null");
+        this.customerId = ValidationUtil.requireNonNull(customerId, "Customer value cannot be null");
+        this.tableId = ValidationUtil.requireNonNull(tableId, "Table value cannot be null");
+        this.numberOfGuests = ValidationUtil.requirePositiveNumber(numberOfGuests, "Number of guests must be a positive number");
     }
 
     protected Reservation() {
     }
 
-    public static Reservation create(TimeSlot timeSlot, RestaurantUserId customerId, RestaurantTableId tableId) {
-        return new Reservation(ReservationId.generate(), timeSlot, customerId, tableId);
+    public static Reservation create(TimeSlot timeSlot, RestaurantUserId customerId, RestaurantTableId tableId, int numberOfGuests) {
+        return new Reservation(ReservationId.generate(), timeSlot, customerId, tableId, numberOfGuests);
     }
 
     public void reschedule(TimeSlot timeSlot) {
-        this.timeSlot = ValidationUtils.requireNonNull(timeSlot, "Time slot cannot be null");
+        this.timeSlot = ValidationUtil.requireNonNull(timeSlot, "Time slot cannot be null");
     }
 
     public void cancel() {
@@ -48,13 +52,6 @@ public class Reservation {
             throw new IllegalStateException("Reservation is already cancelled");
         }
         this.status = ReservationStatus.CANCELLED;
-    }
-
-    public void markAsNoShow() {
-        if(this.status != ReservationStatus.CONFIRMED) {
-            throw new IllegalStateException("Only confirmed reservations can be marked as no-show");
-        }
-        this.status = ReservationStatus.NO_SHOW;
     }
 
     public ReservationId getId() {
@@ -75,5 +72,9 @@ public class Reservation {
 
     public RestaurantTableId getTableId() {
         return tableId;
+    }
+
+    public int getNumberOfGuests() {
+        return numberOfGuests;
     }
 }
