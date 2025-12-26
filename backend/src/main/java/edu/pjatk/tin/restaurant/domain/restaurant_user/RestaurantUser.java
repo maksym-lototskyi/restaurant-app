@@ -15,25 +15,29 @@ public class RestaurantUser {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "email", nullable = false, unique = true))
+    private Email email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Embedded
+    @AttributeOverride(name = "hashedValue", column = @Column(name = "password", nullable = false))
+    private Password password;
 
 
-    public RestaurantUser(RestaurantUserId id, String firstName, String lastName, String email, String password) {
+    public RestaurantUser(RestaurantUserId id, String firstName, String lastName, Email email, Password password) {
         this.id = ValidationUtil.requireNonNull(id, "User ID cannot be null");
         this.firstName = ValidationUtil.requireNonBlank(firstName, "First name cannot be null or blank");
+        ValidationUtil.requireValueInRange(firstName.length(), 1, 50, "First name must be between 1 and 50 characters");
         this.lastName = ValidationUtil.requireNonBlank(lastName, "Last name cannot be null or blank");
-        this.email = ValidationUtil.requireCorrectStringRegex(email, "Email", "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");;
-        this.password = ValidationUtil.requireNonBlank(password, "Password cannot be null or blank");
+        ValidationUtil.requireValueInRange(lastName.length(), 1, 50, "Last name must be between 1 and 50 characters");
+        this.email = ValidationUtil.requireNonNull(email, "Email cannot be null");
+        this.password = ValidationUtil.requireNonNull(password, "Password cannot be null");
     }
 
     protected RestaurantUser() {
     }
 
-    public static RestaurantUser create(String firstName, String lastName, String email, String password) {
+    public static RestaurantUser create(String firstName, String lastName, Email email, Password password) {
         return new RestaurantUser(RestaurantUserId.generate(), firstName, lastName, email, password);
     }
 
@@ -45,12 +49,12 @@ public class RestaurantUser {
         this.lastName = ValidationUtil.requireNonBlank(lastName, "Last name cannot be null or blank");
     }
 
-    public void changeEmail(String email) {
-        this.email = ValidationUtil.requireCorrectStringRegex(email, "Email", "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");;
+    public void changeEmail(Email email) {
+        this.email = ValidationUtil.requireNonNull(email, "Email cannot be null");
     }
 
-    public void changePassword(String password) {
-        this.password = ValidationUtil.requireNonBlank(password, "Password cannot be null or blank");
+    public void changePassword(Password password) {
+        this.password = ValidationUtil.requireNonNull(password, "Password cannot be null");
     }
 
     public RestaurantUserId getId() {
@@ -65,11 +69,11 @@ public class RestaurantUser {
         return lastName;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 }

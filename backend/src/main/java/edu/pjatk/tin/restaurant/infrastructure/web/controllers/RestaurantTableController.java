@@ -1,13 +1,13 @@
-package edu.pjatk.tin.restaurant.web.controller;
+package edu.pjatk.tin.restaurant.infrastructure.web.controllers;
 
 import edu.pjatk.tin.restaurant.application.restaurant_table.*;
 import edu.pjatk.tin.restaurant.domain.hall.HallId;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.TablePosition;
 import edu.pjatk.tin.restaurant.domain.table_type.TableTypeId;
-import edu.pjatk.tin.restaurant.web.dtos.request.restaurant_table.CreateTableDto;
-import edu.pjatk.tin.restaurant.web.dtos.request.restaurant_table.MoveTableDto;
-import edu.pjatk.tin.restaurant.web.dtos.request.restaurant_table.UpdateTableInfoDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.restaurant_table.CreateTableDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.restaurant_table.MoveTableDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.restaurant_table.UpdateTableInfoDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

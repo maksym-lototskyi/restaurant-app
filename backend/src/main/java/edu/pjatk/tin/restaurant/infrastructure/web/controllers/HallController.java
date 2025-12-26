@@ -1,13 +1,13 @@
-package edu.pjatk.tin.restaurant.web.controller;
+package edu.pjatk.tin.restaurant.infrastructure.web.controllers;
 
 import edu.pjatk.tin.restaurant.application.hall.*;
 import edu.pjatk.tin.restaurant.application.hall.CreateHallUseCase;
 import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
 import edu.pjatk.tin.restaurant.domain.hall.HallId;
 import edu.pjatk.tin.restaurant.domain.hall.HallName;
-import edu.pjatk.tin.restaurant.web.dtos.request.hall.CreateHallDto;
-import edu.pjatk.tin.restaurant.web.dtos.request.hall.ResizeHallDto;
-import edu.pjatk.tin.restaurant.web.dtos.request.hall.UpdateHallInfoDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.hall.CreateHallDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.hall.ResizeHallDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.hall.UpdateHallInfoDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

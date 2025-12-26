@@ -1,11 +1,11 @@
-package edu.pjatk.tin.restaurant.web.controller;
+package edu.pjatk.tin.restaurant.infrastructure.web.controllers;
 
 import edu.pjatk.tin.restaurant.application.reservation.*;
 import edu.pjatk.tin.restaurant.domain.reservation.ReservationId;
 import edu.pjatk.tin.restaurant.domain.reservation.TimeSlot;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
-import edu.pjatk.tin.restaurant.web.dtos.request.reservation.CreateReservationDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.reservation.CreateReservationDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -8,7 +8,7 @@ public class UserMapper {
                 user.getId().value(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail()
+                user.getEmail().value()
         );
     }
 }

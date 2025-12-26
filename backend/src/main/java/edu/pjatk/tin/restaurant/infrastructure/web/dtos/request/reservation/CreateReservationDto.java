@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.web.dtos.request.reservation;
+package edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.reservation;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
