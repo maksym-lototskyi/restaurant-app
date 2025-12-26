@@ -1,18 +1,13 @@
-package edu.pjatk.tin.restaurant.application.service;
+package edu.pjatk.tin.restaurant.application.restaurant_table;
 
-import edu.pjatk.tin.restaurant.application.mapper.RestaurantTableMapper;
-import edu.pjatk.tin.restaurant.domain.model.Hall;
-import edu.pjatk.tin.restaurant.domain.model.RestaurantTable;
-import edu.pjatk.tin.restaurant.domain.model.TableType;
-import edu.pjatk.tin.restaurant.domain.value.TablePosition;
-import edu.pjatk.tin.restaurant.application.exceptions.NotFoundException;
-import edu.pjatk.tin.restaurant.domain.repository.HallRepository;
-import edu.pjatk.tin.restaurant.domain.repository.RestaurantTableRepository;
-import edu.pjatk.tin.restaurant.domain.repository.TableTypeRepository;
-import edu.pjatk.tin.restaurant.web.dto.request.CreateTableDto;
-import edu.pjatk.tin.restaurant.web.dto.request.MoveTableDto;
-import edu.pjatk.tin.restaurant.web.dto.request.UpdateTableInfoDto;
-import edu.pjatk.tin.restaurant.web.dto.response.TableDetailsDto;
+import edu.pjatk.tin.restaurant.domain.hall.Hall;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTable;
+import edu.pjatk.tin.restaurant.domain.table_type.TableType;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.TablePosition;
+import edu.pjatk.tin.restaurant.domain.hall.HallRepository;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableRepository;
+import edu.pjatk.tin.restaurant.domain.table_type.TableTypeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,18 +26,19 @@ public class RestaurantTableService {
 
     public TableDetailsDto createTable(CreateTableDto dto){
         TableType tableType = tableTypeRepository.findByName(dto.tableTypeName())
-                .orElseThrow(() -> new NotFoundException("Table type with name " + dto.tableTypeName()+ " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Table type with name " + dto.tableTypeName()+ " not found"));
         Hall hall = hallRepository.findByName(dto.hallName())
-                .orElseThrow(() -> new NotFoundException("Hall with name " + dto.hallName() + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Hall with name " + dto.hallName() + " not found"));
 
-        RestaurantTable restaurantTable = hall.addTable(
+        RestaurantTable restaurantTable = new RestaurantTable(
                 dto.tableNumber(),
                 new TablePosition(
                         dto.positionX(),
                         dto.positionY(),
                         dto.rotation()
                 ),
-                tableType
+                tableType,
+                hall
         );
 
         RestaurantTable savedTable = restaurantTableRepository.save(restaurantTable);
@@ -51,7 +47,7 @@ public class RestaurantTableService {
 
     public TableDetailsDto moveTable(Long tableId, MoveTableDto dto) {
         RestaurantTable restaurantTable = restaurantTableRepository.findById(tableId)
-                .orElseThrow(() -> new NotFoundException("Table with id " + tableId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Table with id " + tableId + " not found"));
 
         restaurantTable.move(TablePosition.of(
                 dto.positionX(),
@@ -65,7 +61,7 @@ public class RestaurantTableService {
 
     public TableDetailsDto updateTableInfo(Long tableId, UpdateTableInfoDto dto){
         RestaurantTable restaurantTable = restaurantTableRepository.findById(tableId)
-                .orElseThrow(() -> new NotFoundException("Table with id " + tableId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Table with id " + tableId + " not found"));
 
         restaurantTable.changeNumber(dto.tableNumber());
         RestaurantTable updatedTable = restaurantTableRepository.save(restaurantTable);
@@ -75,7 +71,7 @@ public class RestaurantTableService {
 
     public TableDetailsDto getTableDetails(Long tableId){
         RestaurantTable restaurantTable = restaurantTableRepository.findById(tableId)
-                .orElseThrow(() -> new NotFoundException("Table with id " + tableId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Table with id " + tableId + " not found"));
 
         return RestaurantTableMapper.toTableDetailsDto(restaurantTable);
     }

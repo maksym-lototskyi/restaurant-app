@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.web.dto.request;
+package edu.pjatk.tin.restaurant.application.hall;
 
 public record CreateHallDto(
         String name,

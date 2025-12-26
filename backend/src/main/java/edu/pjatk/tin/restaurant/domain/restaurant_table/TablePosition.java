@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.domain.value;
+package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.Column;

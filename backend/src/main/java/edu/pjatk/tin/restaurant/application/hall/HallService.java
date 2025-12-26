@@ -1,15 +1,11 @@
-package edu.pjatk.tin.restaurant.application.service;
+package edu.pjatk.tin.restaurant.application.hall;
 
-import edu.pjatk.tin.restaurant.application.mapper.HallMapper;
-import edu.pjatk.tin.restaurant.domain.model.Hall;
-import edu.pjatk.tin.restaurant.domain.model.RestaurantTable;
-import edu.pjatk.tin.restaurant.domain.repository.HallRepository;
-import edu.pjatk.tin.restaurant.domain.repository.RestaurantTableRepository;
-import edu.pjatk.tin.restaurant.domain.value.HallDimensions;
-import edu.pjatk.tin.restaurant.web.dto.request.CreateHallDto;
-import edu.pjatk.tin.restaurant.web.dto.request.ResizeHallDto;
-import edu.pjatk.tin.restaurant.web.dto.request.UpdateHallInfoDto;
-import edu.pjatk.tin.restaurant.web.dto.response.HallDetailsDto;
+import edu.pjatk.tin.restaurant.domain.hall.Hall;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTable;
+import edu.pjatk.tin.restaurant.domain.hall.HallRepository;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableRepository;
+import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +29,7 @@ public class HallService {
 
     public HallDetailsDto resizeHall(Long hallId, ResizeHallDto dto){
         Hall hall = hallRepository.findById(hallId)
-                .orElseThrow(() -> new RuntimeException("Hall with id " + hallId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Hall with id " + hallId + " not found"));
 
         List<RestaurantTable> hallTables = restaurantTableRepository.findAllByHallId(hallId);
         HallDimensions newDimensions = HallDimensions.of(dto.newLength(), dto.newWidth());
@@ -54,7 +50,7 @@ public class HallService {
 
     public HallDetailsDto changeHallInfo(Long hallId, UpdateHallInfoDto dto){
         Hall hall = hallRepository.findById(hallId)
-                .orElseThrow(() -> new RuntimeException("Hall with id " + hallId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Hall with id " + hallId + " not found"));
 
         hall.changeName(dto.name());
         hall.changeFloorNumber(dto.floor());
@@ -65,7 +61,7 @@ public class HallService {
 
     public HallDetailsDto getHallDetails(Long hallId){
         Hall hall = hallRepository.findById(hallId)
-                .orElseThrow(() -> new RuntimeException("Hall with id " + hallId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Hall with id " + hallId + " not found"));
 
         return HallMapper.toHallDetailsDto(hall);
     }

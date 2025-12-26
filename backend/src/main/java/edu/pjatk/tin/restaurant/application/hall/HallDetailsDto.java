@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.web.dto.response;
+package edu.pjatk.tin.restaurant.application.hall;
 
 public record HallDetailsDto(
         Long id,

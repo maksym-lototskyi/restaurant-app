@@ -1,6 +1,5 @@
-package edu.pjatk.tin.restaurant.domain.model;
+package edu.pjatk.tin.restaurant.domain.table_type;
 
-import edu.pjatk.tin.restaurant.domain.value.TableTypeDimensions;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.*;

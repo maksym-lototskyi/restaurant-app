@@ -1,6 +1,6 @@
-package edu.pjatk.tin.restaurant.web.dto.request;
+package edu.pjatk.tin.restaurant.application.restaurant_table;
 
-import edu.pjatk.tin.restaurant.domain.value.TablePosition;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.TablePosition;
 
 public record CreateTableDto(
         String tableNumber,

@@ -1,7 +1,7 @@
-package edu.pjatk.tin.restaurant.domain.model;
+package edu.pjatk.tin.restaurant.domain.reservation;
 
-import edu.pjatk.tin.restaurant.domain.value.ReservationStatus;
-import edu.pjatk.tin.restaurant.domain.value.TimeSlot;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTable;
+import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUser;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -52,9 +52,5 @@ public class Reservation {
             throw new IllegalStateException("Only confirmed reservations can be marked as no-show");
         }
         this.status = ReservationStatus.NO_SHOW;
-    }
-
-    void setCustomer(RestaurantUser customer) {
-        this.customer = customer;
     }
 }

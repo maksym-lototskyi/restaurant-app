@@ -1,21 +1,22 @@
-package edu.pjatk.tin.restaurant.domain.value;
+package edu.pjatk.tin.restaurant.domain.table_type;
 
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public record HallDimensions(
+public record TableTypeDimensions(
         @Column(name = "width", nullable = false)
         int width,
         @Column(name = "length", nullable = false)
-        int length) {
-    public HallDimensions {
+        int length
+) {
+    public TableTypeDimensions {
         ValidationUtils.requirePositiveNumber(width, "Width must be a positive number");
         ValidationUtils.requirePositiveNumber(length, "Length must be a positive number");
     }
 
-    public static HallDimensions of(int length, int width) {
-        return new HallDimensions(width, length);
+    public static TableTypeDimensions of(int width, int length) {
+        return new TableTypeDimensions(width, length);
     }
 }

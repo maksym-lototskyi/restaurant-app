@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.domain.value;
+package edu.pjatk.tin.restaurant.domain.reservation;
 
 import edu.pjatk.tin.restaurant.util.validation.InvalidDateRangeException;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;

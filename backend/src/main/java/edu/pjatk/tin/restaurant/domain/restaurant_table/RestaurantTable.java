@@ -1,8 +1,9 @@
-package edu.pjatk.tin.restaurant.domain.model;
+package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
-import edu.pjatk.tin.restaurant.domain.value.HallDimensions;
-import edu.pjatk.tin.restaurant.domain.value.TablePosition;
-import edu.pjatk.tin.restaurant.domain.value.TableTypeDimensions;
+import edu.pjatk.tin.restaurant.domain.hall.Hall;
+import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
+import edu.pjatk.tin.restaurant.domain.table_type.TableType;
+import edu.pjatk.tin.restaurant.domain.table_type.TableTypeDimensions;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,7 +32,7 @@ public class RestaurantTable {
     protected RestaurantTable() {
     }
 
-    RestaurantTable(String number, TablePosition position, TableType tableType, Hall hall) {
+    public RestaurantTable(String number, TablePosition position, TableType tableType, Hall hall) {
         ValidationUtils.requireNonNull(tableType, "Table type cannot be null");
         ValidationUtils.requireNonNull(hall, "Hall cannot be null");
         validatePosition(position, tableType.getDimensions(), hall.getDimensions());

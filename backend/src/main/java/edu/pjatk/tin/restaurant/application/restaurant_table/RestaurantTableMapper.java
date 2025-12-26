@@ -1,10 +1,9 @@
-package edu.pjatk.tin.restaurant.application.mapper;
+package edu.pjatk.tin.restaurant.application.restaurant_table;
 
-import edu.pjatk.tin.restaurant.domain.model.RestaurantTable;
-import edu.pjatk.tin.restaurant.web.dto.response.TableDetailsDto;
+import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTable;
 
-public class RestaurantTableMapper {
-    public static TableDetailsDto toTableDetailsDto(RestaurantTable table) {
+class RestaurantTableMapper {
+    static TableDetailsDto toTableDetailsDto(RestaurantTable table) {
         return new TableDetailsDto(
                 table.getId(),
                 table.getHall().getName(),

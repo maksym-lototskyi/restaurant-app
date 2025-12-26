@@ -1,12 +1,10 @@
-package edu.pjatk.tin.restaurant.application.mapper;
+package edu.pjatk.tin.restaurant.application.hall;
 
-import edu.pjatk.tin.restaurant.domain.model.Hall;
-import edu.pjatk.tin.restaurant.domain.value.HallDimensions;
-import edu.pjatk.tin.restaurant.web.dto.request.CreateHallDto;
-import edu.pjatk.tin.restaurant.web.dto.response.HallDetailsDto;
+import edu.pjatk.tin.restaurant.domain.hall.Hall;
+import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
 
-public class HallMapper {
-    public static HallDetailsDto toHallDetailsDto(Hall hall) {
+class HallMapper {
+    static HallDetailsDto toHallDetailsDto(Hall hall) {
         return new HallDetailsDto(
                 hall.getId(),
                 hall.getName(),
@@ -15,7 +13,7 @@ public class HallMapper {
         );
     }
 
-    public static Hall toHall(CreateHallDto createHallDto) {
+    static Hall toHall(CreateHallDto createHallDto) {
         return new Hall(
                 createHallDto.name(),
                 HallDimensions.of(
