@@ -26,10 +26,10 @@ public class Reservation {
     private RestaurantTableId tableId;
 
     public Reservation(ReservationId id, TimeSlot timeSlot, RestaurantUserId customerId, RestaurantTableId tableId) {
-        this.id = ValidationUtils.requireNonNull(id, "Reservation id cannot be null");
+        this.id = ValidationUtils.requireNonNull(id, "Reservation value cannot be null");
         this.timeSlot = ValidationUtils.requireNonNull(timeSlot, "Time slot cannot be null");
-        this.customerId = ValidationUtils.requireNonNull(customerId, "Customer id cannot be null");
-        this.tableId = ValidationUtils.requireNonNull(tableId, "Table id cannot be null");
+        this.customerId = ValidationUtils.requireNonNull(customerId, "Customer value cannot be null");
+        this.tableId = ValidationUtils.requireNonNull(tableId, "Table value cannot be null");
     }
 
     protected Reservation() {

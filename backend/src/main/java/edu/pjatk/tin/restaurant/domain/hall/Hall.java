@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class Hall {
     @EmbeddedId
+    @AttributeOverride(name = "value", column = @Column(name = "id", nullable = false))
     private HallId id;
 
     @Embedded

@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.application.restaurant_table;
+package edu.pjatk.tin.restaurant.use_cases.restaurant_table;
 
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTable;
 

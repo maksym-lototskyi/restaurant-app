@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.web.controller;
 
-import edu.pjatk.tin.restaurant.application.hall.*;
+import edu.pjatk.tin.restaurant.use_cases.hall.*;
 import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
 import edu.pjatk.tin.restaurant.domain.hall.HallId;
 import edu.pjatk.tin.restaurant.domain.hall.HallName;

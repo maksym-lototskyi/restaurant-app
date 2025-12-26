@@ -1,12 +1,13 @@
 CREATE TABLE IF NOT EXISTS hall (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL UNIQUE ,
+    id BINARY(16) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE ,
     width INTEGER NOT NULL,
-    length INTEGER NOT NULL
+    length INTEGER NOT NULL,
+    floor_number INTEGER NOT NULL
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS table_type(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BINARY(16) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     number_of_seats INTEGER NOT NULL,
     width INTEGER NOT NULL,
@@ -14,10 +15,10 @@ CREATE TABLE IF NOT EXISTS table_type(
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS restaurant_table (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BINARY(16) PRIMARY KEY,
     table_number VARCHAR(10) NOT NULL UNIQUE,
-    table_type_id BIGINT NOT NULL,
-    hall_id BIGINT NOT NULL,
+    table_type_id BINARY(16) NOT NULL,
+    hall_id BINARY(16) NOT NULL,
     position_x INTEGER NOT NULL,
     position_y INTEGER NOT NULL,
     rotation VARCHAR(50) NOT NULL,
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS restaurant_table (
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS restaurant_user(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BINARY(16) PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
@@ -38,14 +39,14 @@ CREATE TABLE IF NOT EXISTS restaurant_user(
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS reservation(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT NOT NULL,
-    table_id BIGINT NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    customer_id BINARY(16) NOT NULL,
+    table_id BINARY(16) NOT NULL,
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
     status VARCHAR(50) NOT NULL,
     CONSTRAINT user_reservation_fk
-        FOREIGN KEY (user_id) REFERENCES restaurant_user(id),
+        FOREIGN KEY (customer_id) REFERENCES restaurant_user(id),
     CONSTRAINT table_reservation_fk
         FOREIGN KEY (table_id) REFERENCES restaurant_table(id)
 )ENGINE=InnoDB;

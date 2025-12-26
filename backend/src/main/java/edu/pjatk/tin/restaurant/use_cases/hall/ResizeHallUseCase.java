@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.application.hall;
+package edu.pjatk.tin.restaurant.use_cases.hall;
 
 import edu.pjatk.tin.restaurant.UseCase;
 import edu.pjatk.tin.restaurant.domain.hall.Hall;
@@ -44,7 +44,8 @@ public class ResizeHallUseCase {
         for(RestaurantTable table : tables){
             TableType tableType = tableTypeRepository.findById(table.getTableTypeId())
                     .orElseThrow(() -> new EntityNotFoundException("Table type with value " + table.getTableTypeId() + " not found"));
-            TablePlacementValidator.validatePosition(table.getPosition(), tableType.getDimensions(), newDimensions);
+
+            TablePlacementValidator.validatePosition(table.getPosition(), newDimensions, tableType.getDimensions());
         }
     }
 }

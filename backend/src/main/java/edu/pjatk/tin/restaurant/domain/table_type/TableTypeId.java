@@ -14,4 +14,8 @@ public record TableTypeId(UUID value) implements Serializable {
     public static TableTypeId generate() {
         return new TableTypeId(UUID.randomUUID());
     }
+
+    public static TableTypeId of(UUID uuid) {
+        return new TableTypeId(uuid);
+    }
 }
