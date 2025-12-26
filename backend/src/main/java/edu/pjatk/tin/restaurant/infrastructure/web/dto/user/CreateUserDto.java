@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.user;
+package edu.pjatk.tin.restaurant.infrastructure.web.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.table_type;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
+import edu.pjatk.tin.restaurant.util.ValidationUtil;
 import jakarta.persistence.*;
 
 @Entity

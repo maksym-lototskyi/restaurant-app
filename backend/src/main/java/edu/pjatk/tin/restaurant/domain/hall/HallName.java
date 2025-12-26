@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.hall;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
+import edu.pjatk.tin.restaurant.util.ValidationUtil;
 
 public record HallName(String value) {
     public HallName {

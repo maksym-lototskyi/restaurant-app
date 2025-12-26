@@ -1,6 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_user;
 
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
+import edu.pjatk.tin.restaurant.util.ValidationUtil;
 import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;

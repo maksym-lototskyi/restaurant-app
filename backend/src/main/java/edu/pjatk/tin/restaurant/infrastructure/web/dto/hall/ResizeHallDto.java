@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.hall;
+package edu.pjatk.tin.restaurant.infrastructure.web.dto.hall;
 
 import jakarta.validation.constraints.Positive;
 

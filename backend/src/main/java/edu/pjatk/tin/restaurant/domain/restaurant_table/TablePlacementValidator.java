@@ -2,7 +2,7 @@ package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
 import edu.pjatk.tin.restaurant.domain.hall.HallDimensions;
 import edu.pjatk.tin.restaurant.domain.table_type.TableTypeDimensions;
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
+import edu.pjatk.tin.restaurant.util.ValidationUtil;
 
 public class TablePlacementValidator {
     public static void validatePosition(TablePosition position, HallDimensions hallDimensions, TableTypeDimensions tableDimensions) {

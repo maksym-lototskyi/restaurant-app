@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.infrastructure.adapters;
+package edu.pjatk.tin.restaurant.infrastructure.adapter;
 
 import edu.pjatk.tin.restaurant.domain.restaurant_user.PasswordHasher;
 import org.springframework.stereotype.Service;

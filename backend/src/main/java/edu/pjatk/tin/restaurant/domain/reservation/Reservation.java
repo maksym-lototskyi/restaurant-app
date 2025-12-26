@@ -2,7 +2,7 @@ package edu.pjatk.tin.restaurant.domain.reservation;
 
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
-import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
+import edu.pjatk.tin.restaurant.util.ValidationUtil;
 import jakarta.persistence.*;
 
 @Entity

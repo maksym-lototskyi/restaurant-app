@@ -1,4 +1,4 @@
-package edu.pjatk.tin.restaurant.infrastructure.web.dtos.request.table_type;
+package edu.pjatk.tin.restaurant.infrastructure.web.dto.table_type;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
