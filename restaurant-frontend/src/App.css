@@ -1,0 +1,106 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+}
+
+body{
+    background: #333a2f;
+}
+
+h2{
+    color: #b8b2ab
+}
+
+.welcome-text{
+    font-size: 52px;
+    color: white;
+    grid-row: 1;
+    justify-self: center;
+    align-self: center;
+}
+
+.nav-bar {
+    height: 300px;
+    width: auto;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    background-image: url("./assets/restaurant.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.book-button{
+    background: #9f2336;
+    border-radius: 25px;
+    border: none;
+    width: 250px;
+    height: 65px;
+    color: white;
+    justify-self: center;
+    grid-row: 2;
+    align-self: start;
+    font-size: 22px;
+}
+
+button{
+    background: #9f2336;
+    transition: all 0.3s ease;
+}
+
+button:hover{
+    transform: translate(-0.25em) scale(1.05);
+    box-shadow: 0 0 1em 0 #130a05;
+}
+
+button:active{
+    transform: scale(1);
+    box-shadow: none;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 2rem 0.75rem 0.75rem;
+    justify-content: end;
+    background: #333e2e;
+}
+
+.quick-actions button{
+    border: none;
+    padding:  0.25rem 0.75rem 0.25rem 0.75rem;
+    color: black;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.grid-container {
+    display: grid;
+    gap: 1rem;
+    margin: 70px 150px 50px 150px;
+    grid-template-rows: 130px 130px 130px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.grid-item {
+    background: #3a1919;
+    border-radius: 40px;
+}
+
+.grid-item1{
+    grid-area: 1 / 1 / 4 / 5;
+}
+.grid-item2{
+    grid-area: 1 / 5 / 3 / 7;
+}
+
+.grid-item3{
+    grid-area: 3 / 5 / 3 / 7;
+}
+
+
