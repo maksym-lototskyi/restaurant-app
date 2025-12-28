@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface HallRepository extends JpaRepository<Hall, HallId> {
     Optional<Hall> findByName(HallName name);
+
+    boolean existsByName(HallName name);
 }

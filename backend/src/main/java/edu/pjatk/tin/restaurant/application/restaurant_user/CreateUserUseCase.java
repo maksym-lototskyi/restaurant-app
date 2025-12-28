@@ -15,7 +15,7 @@ public class CreateUserUseCase {
         this.userRepository = userRepository;
     }
 
-    public UserDetails execute(String firstName, String lastName, Email email, Password password){
+    public RestaurantUserDetails execute(String firstName, String lastName, Email email, Password password){
         if(userRepository.existsByEmail(email))
             throw new EntityExistsException("User with email " + email.value() + " already exists");
 

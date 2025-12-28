@@ -13,7 +13,7 @@ public class UpdateProfileUseCase {
         this.userRepository = userRepository;
     }
 
-    public UserDetails execute(RestaurantUserId userId, String firstName, String lastName, Email email, Password password) {
+    public RestaurantUserDetails execute(RestaurantUserId userId, String firstName, String lastName, Email email, Password password) {
         RestaurantUser user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 

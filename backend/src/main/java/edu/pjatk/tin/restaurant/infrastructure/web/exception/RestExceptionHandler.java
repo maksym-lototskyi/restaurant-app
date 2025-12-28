@@ -1,6 +1,7 @@
 package edu.pjatk.tin.restaurant.infrastructure.web.exception;
 
 import edu.pjatk.tin.restaurant.application.reservation.ReservationCollisionException;
+import edu.pjatk.tin.restaurant.util.validation.ValidationFailedException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -18,16 +19,19 @@ public class RestExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiError> handleEntityNotFoundException(EntityNotFoundException e) {
+        logger.warn("Entity not found: {}", e.getMessage());
         return buildResponse(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({EntityExistsException.class, ReservationCollisionException.class})
     public ResponseEntity<ApiError> handleConflictExceptions(RuntimeException e) {
+        logger.warn("Conflict occurred: {}", e.getMessage());
         return buildResponse(e, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(ValidationFailedException.class)
     public ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException e) {
+        logger.warn("Validation failed: {}", e.getMessage());
         return buildResponse(e, HttpStatus.BAD_REQUEST);
     }
 

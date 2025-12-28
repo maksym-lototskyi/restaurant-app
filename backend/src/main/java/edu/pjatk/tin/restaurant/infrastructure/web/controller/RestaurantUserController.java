@@ -33,8 +33,8 @@ public class RestaurantUserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDetails> createUser(@Valid @RequestBody CreateUserDto dto) {
-        UserDetails userDetails = createUserUseCase.execute(
+    public ResponseEntity<RestaurantUserDetails> createUser(@Valid @RequestBody CreateUserDto dto) {
+        RestaurantUserDetails userDetails = createUserUseCase.execute(
                 dto.firstName(),
                 dto.lastName(),
                 Email.of(dto.email()),
@@ -44,8 +44,8 @@ public class RestaurantUserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDetails> updateUser(@PathVariable UUID userId, @Valid @RequestBody CreateUserDto dto){
-        UserDetails userDetails = updateProfileUseCase.execute(
+    public ResponseEntity<RestaurantUserDetails> updateUser(@PathVariable UUID userId, @Valid @RequestBody CreateUserDto dto){
+        RestaurantUserDetails userDetails = updateProfileUseCase.execute(
                 RestaurantUserId.of(userId),
                 dto.firstName(),
                 dto.lastName(),
@@ -63,15 +63,15 @@ public class RestaurantUserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDetails> getUserDetails(@PathVariable UUID userId){
-        UserDetails userDetails = getUserDetailsUseCase.execute(RestaurantUserId.of(userId));
+    public ResponseEntity<RestaurantUserDetails> getUserDetails(@PathVariable UUID userId){
+        RestaurantUserDetails userDetails = getUserDetailsUseCase.execute(RestaurantUserId.of(userId));
         return ResponseEntity.ok(userDetails);
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<UserDetails>> getAllUsers(@RequestParam(required = false, defaultValue = "0") int page,
-                                                             @RequestParam(required = false, defaultValue = "10") int size){
-        Page<UserDetails> users = getUserPageUseCase.execute(page, size);
+    public ResponseEntity<Iterable<RestaurantUserDetails>> getAllUsers(@RequestParam(required = false, defaultValue = "0") int page,
+                                                                       @RequestParam(required = false, defaultValue = "10") int size){
+        Page<RestaurantUserDetails> users = getUserPageUseCase.execute(page, size);
         return ResponseEntity.ok(users);
     }
 }

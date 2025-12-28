@@ -13,7 +13,7 @@ public class GetUserPageUseCase {
         this.userRepository = userRepository;
     }
 
-    public Page<UserDetails> execute(int pageNumber, int pageSize) {
+    public Page<RestaurantUserDetails> execute(int pageNumber, int pageSize) {
         return userRepository.findAll(Pageable.ofSize(pageSize).withPage(pageNumber))
                 .map(UserMapper::toDetails);
     }
