@@ -1,4 +1,5 @@
 import WeeklyReservationsChart from "./WeeklyReservationsChart.jsx";
+import './UserPage.css'
 
 const data = [
     {day : "Monday", reservations : 10},
@@ -10,13 +11,16 @@ const data = [
     {day : "Sunday", reservations : 14}
 ]
 
-function UserPage() {
+function UserPage({onViewDetails}) {
     return <div className="grid-container">
-        <div className="grid-item1 grid-item" style={{padding:20, display: 'flex', justifyContent:'center', alignItems: 'center', flexDirection : "column", gap : "1rem"}}>
+        <div className="grid-item1 grid-item">
             <h2>Popular days</h2>
             <WeeklyReservationsChart data={data}></WeeklyReservationsChart>
         </div>
-        <div className="grid-item2 grid-item"></div>
+        <div className="grid-item2 grid-item">
+            <h2>Your next reservation</h2>
+            <button onClick={onViewDetails} className="secondary-button">View Details &gt;</button>
+        </div>
         <div className="grid-item3 grid-item"></div>
     </div>
 }

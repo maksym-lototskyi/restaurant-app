@@ -1,0 +1,17 @@
+.field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 1rem;
+    width: 100%
+}
+
+.field .label {
+    grid-column: 1;
+    font-weight: 600;
+    color: #666;
+}
+
+.field .value {
+    grid-column: 2;
+    color: #222;
+}
