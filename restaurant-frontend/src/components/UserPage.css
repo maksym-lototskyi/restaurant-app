@@ -3,20 +3,8 @@
     margin: 80px auto 50px auto;
     display: grid;
     gap: 1rem;
-    grid-template-rows: 130px 130px 130px;
+    grid-template-rows: 130px 170px 90px;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-}
-
-.grid-item {
-    background: whitesmoke;
-    border-radius: 5px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction : column;
-    gap : 1rem;
-    box-shadow: 0 0 1em 0 #b5aba5;
 }
 
 .grid-item1{
@@ -24,10 +12,6 @@
 }
 .grid-item2{
     grid-area: 1 / 5 / 3 / 7;
-}
-
-.grid-item3{
-    grid-area: 3 / 5 / 3 / 7;
 }
 
 @media screen and (max-width: 600px) {

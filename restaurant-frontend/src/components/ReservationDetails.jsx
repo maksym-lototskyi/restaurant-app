@@ -1,12 +1,14 @@
 import Field from "./Field.jsx";
 import InputField from "./InputField.jsx";
 import {useEffect, useState} from "react";
+import Dialog from "./Dialog.jsx";
 
 function ReservationDetails({id, onBack}) {
     const [reservation, setReservation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
+    const [showDialog, setShowDialog] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:8080/reservations/${id}`)
@@ -18,7 +20,7 @@ function ReservationDetails({id, onBack}) {
             });
     }, [id]);
 
-    const handleConfirm = async () => {
+    const handleEditConfirm = async () => {
         try {
             const response = await fetch(
                 `http://localhost:8080/reservations/${reservation.id}/reschedule?newStartTime=${form.reservationStart}`,
@@ -46,11 +48,27 @@ function ReservationDetails({id, onBack}) {
         }
     };
 
+    const handleReservationCancelConfirm = async () => {
+        try{
+            const response = await fetch(`http://localhost:8080/reservations/${reservation.id}/cancel`,
+                {
+                    method: "PUT"
+                });
+            if(response.ok){
+                onBack();
+            }
+        }catch (error) {
+            console.error(error);
+            alert("Could not cancel reservation. Please try again.");
+        }
+
+    }
+
     const handleReschedule = () => {
         setIsEdit(true);
     }
 
-    const handleCancel = () => {
+    const handleCancelEdit = () => {
         setIsEdit(false);
     }
 
@@ -60,19 +78,26 @@ function ReservationDetails({id, onBack}) {
         console.log(form);
     }
 
+    const handleShowDialog = () => {
+        setShowDialog(true);
+    }
+
     if (!reservation) return <p>Reservation not found</p>;
 
     const start = new Date(reservation.reservationStart);
     const end = new Date(reservation.reservationEnd);
 
     return (
-        <section className="card-container">
+        <section className="card-container center">
+            <Dialog isOpen={showDialog} onClose={() => {setShowDialog(false)}} onConfirm={handleReservationCancelConfirm}
+                    title="Confirmation" content="Are you sure you want to cancel the reservation?">
+            </Dialog>
             {loading ? (
                 <p>Loading...</p>
             ) : (<>
-                <h2>Reservation Details</h2>
+                <h2 className="card-header">Reservation Details</h2>
 
-                <div className="card">
+                <div className="card-body start-aligned">
                     {isEdit ? <InputField label="Date and Time" name="reservationStart" value={form.reservationStart} inputType="datetime-local" handleChange={handleChange} /> :
                         <>
                             <Field label="Date:">
@@ -108,16 +133,16 @@ function ReservationDetails({id, onBack}) {
                         {reservation.customerDetails.email}
                     </Field>
                 </div>
-                <div className="card-bottom-buttons">
+                <div className="card-footer">
                     {isEdit ?
                         (<>
-                            <button className="secondary-button" onClick={handleConfirm}>Confirm</button>
-                            <button className="secondary-button" onClick={handleCancel}>Cancel</button>
+                            <button className="secondary-button" onClick={handleEditConfirm}>Confirm</button>
+                            <button className="secondary-button" onClick={handleCancelEdit}>Cancel</button>
                         </>) :
                         (<>
                             <button className="secondary-button" onClick={onBack}>Back</button>
                             <button className="secondary-button" onClick={handleReschedule}>Reschedule</button>
-                            <button className="secondary-button">Cancel</button>
+                            <button className="secondary-button" onClick={handleShowDialog}>Cancel</button>
                         </>)}
                 </div>
             </>)}

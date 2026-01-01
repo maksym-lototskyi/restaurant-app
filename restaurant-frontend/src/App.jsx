@@ -7,9 +7,11 @@ import NabBar from "./components/TopBanner.jsx";
 
 function App() {
     const [view, setView] = useState("home");
-    const views = {
-        home: <UserPage onViewDetails={() => setView("reservation")} />,
-        reservation: <ReservationDetails id="25f4a95c-b578-4b20-9f13-cf272fc6b594" onBack={() => setView("home")} />
+    const [selectedReservationId, setSelectedReservationId] = useState(null);
+
+    const handleViewDetails = (id) => {
+        setSelectedReservationId(id);
+        setView("reservation");
     };
 
     return (
@@ -19,10 +21,13 @@ function App() {
                 {view === 'home' ? <NabBar/> : null}
             </header>
             <main>
-                {views[view]}
+                {view === 'home' && <UserPage onViewDetails={handleViewDetails} />}
+                {view === 'reservation' && selectedReservationId && (
+                    <ReservationDetails id={selectedReservationId} onBack={() => setView("home")} />
+                )}
             </main>
         </>
-    )
+    );
 }
 
 export default App
