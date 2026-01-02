@@ -45,7 +45,7 @@ public class RestExceptionHandler {
         ApiError apiError = ApiError.of(
                 status.value(),
                 e.getMessage(),
-                LocalDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
         );
         return new ResponseEntity<>(apiError, status);
     }

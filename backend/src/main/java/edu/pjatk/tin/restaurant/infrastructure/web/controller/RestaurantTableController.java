@@ -1,13 +1,8 @@
 package edu.pjatk.tin.restaurant.infrastructure.web.controller;
 
 import edu.pjatk.tin.restaurant.application.restaurant_table.*;
-import edu.pjatk.tin.restaurant.domain.hall.HallId;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
-import edu.pjatk.tin.restaurant.domain.restaurant_table.TablePosition;
-import edu.pjatk.tin.restaurant.domain.table_type.TableTypeId;
-import edu.pjatk.tin.restaurant.infrastructure.web.dto.restaurant_table.CreateTableDto;
-import edu.pjatk.tin.restaurant.infrastructure.web.dto.restaurant_table.MoveTableDto;
-import edu.pjatk.tin.restaurant.infrastructure.web.dto.restaurant_table.UpdateTableInfoDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateTableDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,54 +15,34 @@ import java.util.UUID;
 @RequestMapping("/tables")
 public class RestaurantTableController {
     private final CreateTableUseCase createTableUseCase;
-    private final MoveTableUseCase moveTableUseCase;
     private final DeleteTableUseCase deleteTableUseCase;
     private final UpdateTableInfoUseCase updateTableInfoUseCase;
     private final GetTableDetailsUseCase getTableDetailsUseCase;
-    private final GetTablesInHallUseCase getTablesInHallUseCase;
+    private final GetAllTablesUseCase getAllTablesUseCase;
 
-    public RestaurantTableController(CreateTableUseCase createTableUseCase, MoveTableUseCase moveTableUseCase, DeleteTableUseCase deleteTableUseCase, UpdateTableInfoUseCase updateTableInfoUseCase, GetTableDetailsUseCase getTableDetailsUseCase, GetTablesInHallUseCase getTablesInHallUseCase) {
+    public RestaurantTableController(CreateTableUseCase createTableUseCase, DeleteTableUseCase deleteTableUseCase, UpdateTableInfoUseCase updateTableInfoUseCase, GetTableDetailsUseCase getTableDetailsUseCase, GetAllTablesUseCase getAllTablesUseCase) {
         this.createTableUseCase = createTableUseCase;
-        this.moveTableUseCase = moveTableUseCase;
         this.deleteTableUseCase = deleteTableUseCase;
         this.updateTableInfoUseCase = updateTableInfoUseCase;
         this.getTableDetailsUseCase = getTableDetailsUseCase;
-        this.getTablesInHallUseCase = getTablesInHallUseCase;
+        this.getAllTablesUseCase = getAllTablesUseCase;
     }
 
     @PostMapping
     public ResponseEntity<TableDetails> createTable(@Valid @RequestBody CreateTableDto dto){
         TableDetails tableDetails = createTableUseCase.execute(
-                dto.tableNumber(),
-                new TablePosition(
-                        dto.positionX(),
-                        dto.positionY(),
-                        TablePosition.Rotation.fromDegree(dto.rotation())
-                ),
-                TableTypeId.of(dto.tableTypeId()),
-                HallId.of(dto.hallId())
+                dto.tableNumber(), dto.floorNumber(), dto.numberOfSeats()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(tableDetails);
     }
 
-    @PutMapping("/{tableId}/move")
-    public ResponseEntity<TableDetails> moveTable(@PathVariable("tableId") UUID tableId, @Valid @RequestBody MoveTableDto dto){
-        TableDetails result = moveTableUseCase.execute(
-                RestaurantTableId.of(tableId),
-                new TablePosition(
-                        dto.positionX(),
-                        dto.positionY(),
-                        TablePosition.Rotation.fromDegree(dto.rotationDegree())
-                )
-        );
-        return ResponseEntity.ok(result);
-    }
-
     @PutMapping("/{tableId}")
-    public ResponseEntity<TableDetails> updateTableInfo(@PathVariable("tableId") UUID tableId, @Valid @RequestBody UpdateTableInfoDto dto){
+    public ResponseEntity<TableDetails> updateTableInfo(@PathVariable("tableId") UUID tableId, @Valid @RequestBody CreateTableDto dto){
         TableDetails result = updateTableInfoUseCase.execute(
                 RestaurantTableId.of(tableId),
-                dto.tableNumber());
+                dto.tableNumber(),
+                dto.floorNumber(),
+                dto.numberOfSeats());
         return ResponseEntity.ok(result);
     }
 
@@ -77,9 +52,9 @@ public class RestaurantTableController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/hall/{hallId}")
-    public ResponseEntity<List<TableDetails>> getTablesInHall(@PathVariable("hallId") UUID hallId){
-        List<TableDetails> result = getTablesInHallUseCase.execute(HallId.of(hallId));
+    @GetMapping
+    public ResponseEntity<List<TableDetails>> getTablesInHall(){
+        List<TableDetails> result = getAllTablesUseCase.execute();
         return ResponseEntity.ok(result);
     }
 

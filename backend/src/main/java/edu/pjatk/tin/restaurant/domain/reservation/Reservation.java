@@ -34,6 +34,7 @@ public class Reservation {
         this.customerId = ValidationUtil.requireNonNull(customerId, "Customer value cannot be null");
         this.tableId = ValidationUtil.requireNonNull(tableId, "Table value cannot be null");
         this.numberOfGuests = ValidationUtil.requirePositiveNumber(numberOfGuests, "Number of guests must be a positive number");
+        ReservationPolicy.validate(timeSlot);
     }
 
     protected Reservation() {
@@ -45,6 +46,7 @@ public class Reservation {
 
     public void reschedule(TimeSlot timeSlot) {
         this.timeSlot = ValidationUtil.requireNonNull(timeSlot, "Time slot cannot be null");
+        ReservationPolicy.validate(timeSlot);
     }
 
     public void cancel() {

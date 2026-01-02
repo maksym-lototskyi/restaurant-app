@@ -5,7 +5,7 @@ import edu.pjatk.tin.restaurant.domain.reservation.ReservationId;
 import edu.pjatk.tin.restaurant.domain.reservation.TimeSlot;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
-import edu.pjatk.tin.restaurant.infrastructure.web.dto.reservation.CreateReservationDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateReservationDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +23,16 @@ public class ReservationController {
     private final CancelReservationUseCase cancelReservationUseCase;
     private final GetReservationDetailsUseCase getReservationDetailsUseCase;
     private final GetUserReservationsUseCase getUserReservationsUseCase;
+    private final GetNextReservationUseCase getNextReservationUseCase;
     private final GetAllReservationsUseCase getAllReservationsUseCase;
 
-    public ReservationController(CreateReservationUseCase createReservationUseCase, RescheduleReservationUseCase rescheduleReservationUseCase, CancelReservationUseCase cancelReservationUseCase, GetReservationDetailsUseCase getReservationDetailsUseCase, GetUserReservationsUseCase getUserReservationsUseCase, GetAllReservationsUseCase getAllReservationsUseCase) {
+    public ReservationController(CreateReservationUseCase createReservationUseCase, RescheduleReservationUseCase rescheduleReservationUseCase, CancelReservationUseCase cancelReservationUseCase, GetReservationDetailsUseCase getReservationDetailsUseCase, GetUserReservationsUseCase getUserReservationsUseCase, GetNextReservationUseCase getNextReservationUseCase, GetAllReservationsUseCase getAllReservationsUseCase) {
         this.createReservationUseCase = createReservationUseCase;
         this.rescheduleReservationUseCase = rescheduleReservationUseCase;
         this.cancelReservationUseCase = cancelReservationUseCase;
         this.getReservationDetailsUseCase = getReservationDetailsUseCase;
         this.getUserReservationsUseCase = getUserReservationsUseCase;
+        this.getNextReservationUseCase = getNextReservationUseCase;
         this.getAllReservationsUseCase = getAllReservationsUseCase;
     }
 
@@ -39,22 +41,22 @@ public class ReservationController {
         ReservationSummary reservationSummary = createReservationUseCase.execute(
                 RestaurantUserId.of(dto.customerId()),
                 RestaurantTableId.of(dto.tableId()),
-                TimeSlot.of(dto.reservationStart(), dto.reservationStart().plusHours(2)),
+                TimeSlot.of(dto.reservationStart()),
                 dto.numberOfGuests()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationSummary);
     }
 
     @PutMapping("/{reservationId}/reschedule")
-    public ResponseEntity<ReservationSummary> rescheduleReservation(
+    public ResponseEntity<ReservationDetails> rescheduleReservation(
             @PathVariable("reservationId") UUID reservationId,
             @RequestParam("newStartTime") LocalDateTime newStartTime
     ) {
-        ReservationSummary reservationSummary = rescheduleReservationUseCase.execute(
+        ReservationDetails reservationDetails = rescheduleReservationUseCase.execute(
                 ReservationId.of(reservationId),
-                TimeSlot.of(newStartTime, newStartTime.plusHours(2))
+                TimeSlot.of(newStartTime)
         );
-        return ResponseEntity.ok(reservationSummary);
+        return ResponseEntity.ok(reservationDetails);
     }
 
     @PutMapping("/{reservationId}/cancel")
@@ -73,6 +75,12 @@ public class ReservationController {
     public ResponseEntity<List<ReservationSummary>> getUserReservations(@PathVariable("customerId") UUID customerId) {
         List<ReservationSummary> reservations = getUserReservationsUseCase.execute(RestaurantUserId.of(customerId));
         return ResponseEntity.ok(reservations);
+    }
+
+    @GetMapping("/{customerId}/next")
+    public ResponseEntity<ReservationSummary> getNextReservation(@PathVariable("customerId") UUID customerId) {
+        ReservationSummary nextReservation = getNextReservationUseCase.execute(RestaurantUserId.of(customerId));
+        return ResponseEntity.ok(nextReservation);
     }
 
     @GetMapping

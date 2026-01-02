@@ -1,6 +1,5 @@
 package edu.pjatk.tin.restaurant.application.reservation;
 
-import edu.pjatk.tin.restaurant.application.restaurant_table.TableDetails;
 import edu.pjatk.tin.restaurant.application.restaurant_user.RestaurantUserDetails;
 
 import java.time.LocalDateTime;
@@ -11,7 +10,7 @@ public record ReservationDetails(
         int numberOfGuests,
         LocalDateTime reservationStart,
         LocalDateTime reservationEnd,
-        TableDetails tableDetails,
+        String tableNumber,
         RestaurantUserDetails customerDetails
 ) {
 }

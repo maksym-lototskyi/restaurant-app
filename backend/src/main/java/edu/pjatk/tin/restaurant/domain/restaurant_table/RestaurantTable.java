@@ -1,7 +1,5 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
-import edu.pjatk.tin.restaurant.domain.hall.HallId;
-import edu.pjatk.tin.restaurant.domain.table_type.TableTypeId;
 import edu.pjatk.tin.restaurant.util.validation.ValidationUtil;
 import jakarta.persistence.*;
 
@@ -12,62 +10,51 @@ public class RestaurantTable {
     private RestaurantTableId id;
 
     @Column(name = "table_number", nullable = false)
-    private String number;
-
-    @Embedded
-    private TablePosition position;
-
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "table_type_id", nullable = false))
-    private TableTypeId tableTypeId;
-
-    @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "hall_id", nullable = false))
-    private HallId hallId;
+    private String tableNumber;
+    @Column(name = "floor_number", nullable = false)
+    private int floorNumber;
+    @Column(name = "number_of_seats", nullable = false)
+    private int numberOfSeats;
 
     protected RestaurantTable() {
     }
 
-    public RestaurantTable(RestaurantTableId tableId, String number, TablePosition position, TableTypeId tableTypeId, HallId hallId) {
-        ValidationUtil.requireNonNull(tableTypeId, "Table type value cannot be null");
-        ValidationUtil.requireNonNull(hallId, "Hall value cannot be null");
+    public RestaurantTable(RestaurantTableId tableId, String tableNumber, int floorNumber, int numberOfSeats) {
         ValidationUtil.requireNonNull(tableId, "TableId cannot be null");
-        this.number = ValidationUtil.requireNonBlank(number, "Table number cannot be null or blank");
-        this.position = ValidationUtil.requireNonNull(position, "Table position cannot be null");
-        this.tableTypeId = tableTypeId;
-        this.hallId = hallId;
+        ValidationUtil.requirePositiveNumber(numberOfSeats, "Number of seats must be a positive number");
+        ValidationUtil.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
+        this.tableNumber = ValidationUtil.requireNonBlank(tableNumber, "Table number cannot be null or blank");
         this.id = tableId;
     }
 
-    public static RestaurantTable create(String number, TablePosition position, TableTypeId tableTypeId, HallId hallId) {
-        return new RestaurantTable(RestaurantTableId.generate(), number, position, tableTypeId, hallId);
+    public static RestaurantTable create(String number, int floorNumber, int numberOfSeats) {
+        return new RestaurantTable(RestaurantTableId.generate(), number, floorNumber, numberOfSeats);
     }
 
     public void changeNumber(String number) {
-        this.number = ValidationUtil.requireNonBlank(number, "Table number cannot be null or blank");
+        this.tableNumber = ValidationUtil.requireNonBlank(number, "Table number cannot be null or blank");
     }
 
-    public void move(TablePosition position) {
-        this.position = ValidationUtil.requireNonNull(position, "Table position cannot be null");
+    public void changeFloor(int floorNumber) {
+        this.floorNumber = ValidationUtil.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
+    }
+    public void changeNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = ValidationUtil.requirePositiveNumber(numberOfSeats, "Number of seats must be a positive number");
     }
 
     public RestaurantTableId getId() {
         return id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getTableNumber() {
+        return tableNumber;
     }
 
-    public TablePosition getPosition() {
-        return position;
+    public int getFloorNumber() {
+        return floorNumber;
     }
 
-    public TableTypeId getTableTypeId() {
-        return tableTypeId;
-    }
-
-    public HallId getHallId() {
-        return hallId;
+    public int getNumberOfSeats() {
+        return numberOfSeats;
     }
 }

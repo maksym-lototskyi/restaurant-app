@@ -7,13 +7,13 @@ import edu.pjatk.tin.restaurant.application.restaurant_table.TableMapper;
 import edu.pjatk.tin.restaurant.application.restaurant_user.UserMapper;
 
 public class ReservationMapper {
-    public static ReservationDetails toDetails(Reservation reservation, RestaurantTable table, RestaurantUser user) {
+    public static ReservationDetails toDetails(Reservation reservation, String tableNumber, RestaurantUser user) {
         return new ReservationDetails(
                 reservation.getId().value(),
                 reservation.getNumberOfGuests(),
                 reservation.getTimeSlot().startTime(),
                 reservation.getTimeSlot().endTime(),
-                TableMapper.toDetails(table),
+                tableNumber,
                 UserMapper.toDetails(user)
         );
     }

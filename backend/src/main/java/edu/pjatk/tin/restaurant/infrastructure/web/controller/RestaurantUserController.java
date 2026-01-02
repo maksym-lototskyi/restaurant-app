@@ -5,7 +5,7 @@ import edu.pjatk.tin.restaurant.domain.restaurant_user.Email;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.Password;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.PasswordHasher;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
-import edu.pjatk.tin.restaurant.infrastructure.web.dto.user.CreateUserDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateUserDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

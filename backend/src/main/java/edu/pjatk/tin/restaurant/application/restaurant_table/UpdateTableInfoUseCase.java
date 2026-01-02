@@ -13,14 +13,16 @@ public class UpdateTableInfoUseCase {
         this.restaurantTableRepository = restaurantTableRepository;
     }
 
-    public TableDetails execute(RestaurantTableId tableId, String newTableNumber){
+    public TableDetails execute(RestaurantTableId tableId, String newTableNumber, int floorNumber, int numberOfSeats){
         var table = restaurantTableRepository.findById(tableId)
                 .orElseThrow(() -> new IllegalArgumentException("Table with id " + tableId + " not found"));
 
-        if(restaurantTableRepository.existsByHallIdAndNumber(table.getHallId(), newTableNumber))
-            throw new EntityExistsException("Table with number " + newTableNumber + " already exists in hall with id " + table.getHallId());
+        if(restaurantTableRepository.existsByTableNumber(newTableNumber))
+            throw new EntityExistsException("Table with number " + newTableNumber + " already exists");
 
         table.changeNumber(newTableNumber);
+        table.changeFloor(floorNumber);
+        table.changeNumberOfSeats(numberOfSeats);
 
         return TableMapper.toDetails(restaurantTableRepository.save(table));
     }

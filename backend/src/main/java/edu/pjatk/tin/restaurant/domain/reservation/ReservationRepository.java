@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, ReservationId> {
     @Query("""
@@ -29,4 +30,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Reserv
 
 
     List<Reservation> findByCustomerId(RestaurantUserId customerId);
+    @Query("""
+    SELECT r FROM Reservation r
+    WHERE r.customerId = :customerId
+    AND r.timeSlot.startTime > CURRENT_TIMESTAMP
+    AND r.status = :status
+    ORDER BY r.timeSlot.startTime ASC
+""")
+    Optional<Reservation> findNextReservationByCustomerId(@Param("customerId") RestaurantUserId customerId, @Param("status") ReservationStatus status);
 }

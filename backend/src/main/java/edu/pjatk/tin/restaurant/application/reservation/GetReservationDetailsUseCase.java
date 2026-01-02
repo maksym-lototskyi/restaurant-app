@@ -29,6 +29,6 @@ public class GetReservationDetailsUseCase {
         var table = tableRepository.findById(reservation.getTableId())
                 .orElseThrow(() -> new EntityNotFoundException("Table with id " + reservation.getTableId() + " not found"));
 
-        return ReservationMapper.toDetails(reservation, table, user);
+        return ReservationMapper.toDetails(reservation, table.getTableNumber(), user);
     }
 }

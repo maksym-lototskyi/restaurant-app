@@ -49,5 +49,11 @@ public final class ValidationUtil {
         return start;
     }
 
+    public static <T extends Number> T requireNonNegativeNumber(T val, String message) {
+        if (val == null || val.doubleValue() < 0) {
+            throw new ValidationFailedException(message);
+        }
+        return val;
+    }
 }
 
