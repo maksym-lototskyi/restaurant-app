@@ -136,13 +136,13 @@ function ReservationDetails({id, onBack}) {
                 <div className="card-footer">
                     {isEdit ?
                         (<>
-                            <button className="secondary-button" onClick={handleEditConfirm}>Confirm</button>
+                            <button className="secondary-button confirm-button" onClick={handleEditConfirm}>Confirm</button>
                             <button className="secondary-button" onClick={handleCancelEdit}>Cancel</button>
                         </>) :
                         (<>
                             <button className="secondary-button" onClick={onBack}>Back</button>
                             <button className="secondary-button" onClick={handleReschedule}>Reschedule</button>
-                            <button className="secondary-button" onClick={handleShowDialog}>Cancel</button>
+                            <button className="secondary-button cancel-button" onClick={handleShowDialog}>Cancel</button>
                         </>)}
                 </div>
             </>)}

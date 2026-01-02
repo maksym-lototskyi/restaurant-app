@@ -2,6 +2,7 @@ import WeeklyReservationsChart from "./WeeklyReservationsChart.jsx";
 import './UserPage.css'
 import {useEffect, useState} from "react";
 import Field from "./Field.jsx";
+import MakeReservation from "./MakeReservation.jsx";
 
 const data = [
     {day: "Monday", reservations: 10},
@@ -18,7 +19,7 @@ function UserPage({onViewDetails}) {
     const [loadingReservation, setLoadingReservation] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:8080/reservations/0365f599-96a4-4002-9918-d2d100f9f184/next")
+        fetch("http://localhost:8080/reservations/1d3fd690-5180-4e7a-9ad0-940e44e896c6/next")
             .then(res => {
                 if (res.ok) {
                     return res.json();
@@ -51,7 +52,7 @@ function UserPage({onViewDetails}) {
 
     return <div className="grid-container">
         <div className="grid-item1 card-container">
-            <h2 className="card-header center-aligned">Popular days</h2>
+            <h3 className="card-header center-aligned">Popular days</h3>
             <div className="card-body center-aligned">
                 <WeeklyReservationsChart data={data}></WeeklyReservationsChart>
             </div>
@@ -59,10 +60,10 @@ function UserPage({onViewDetails}) {
         <div className="grid-item2 card-container">
             {loadingReservation ? <p>Loading...</p> :
                 <>
-                    <h2 className="card-header center-aligned">Your next reservation</h2>
+                    <h3 className="card-header center-aligned">Your next reservation</h3>
                     <div className="card-body center-aligned">
                         {nextReservation ? <>
-                                <Field label="numberOfGuests">{nextReservation.numberOfGuests}</Field>
+                                <Field label="Number of Guests">{nextReservation.numberOfGuests}</Field>
                                 <Field label="Date">{start.toLocaleDateString()}</Field>
 
                                 <Field label="Time">
@@ -81,7 +82,7 @@ function UserPage({onViewDetails}) {
                 </>
             }
         </div>
-        <div className="grid-item3"></div>
+            <MakeReservation></MakeReservation>
     </div>
 }
 

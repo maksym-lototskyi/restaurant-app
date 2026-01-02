@@ -11,7 +11,7 @@ function Dialog({isOpen, onClose, onConfirm, title, content}) {
                 </div>
                 <div className="card-footer">
                     <button className="secondary-button" onClick={onClose}>Close</button>
-                    <button className="secondary-button" onClick={onConfirm}>Confirm</button>
+                    <button className="secondary-button confirm-button" onClick={onConfirm}>Confirm</button>
                 </div>
             </div>
         </div>
