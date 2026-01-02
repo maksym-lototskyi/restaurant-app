@@ -38,4 +38,22 @@ public interface ReservationRepository extends JpaRepository<Reservation, Reserv
     ORDER BY r.timeSlot.startTime ASC
 """)
     Optional<Reservation> findNextReservationByCustomerId(@Param("customerId") RestaurantUserId customerId, @Param("status") ReservationStatus status);
+
+    @Query("""
+    SELECT COUNT(DISTINCT r.tableId)
+    FROM Reservation r, RestaurantTable t
+    WHERE r.tableId = t.id
+      AND r.status = :status
+      AND r.timeSlot.startTime < :slotEnd
+      AND r.timeSlot.endTime > :slotStart
+      AND t.numberOfSeats >= :guestCount
+""")
+    long countBusyTables(
+            @Param("slotStart") LocalDateTime slotStart,
+            @Param("slotEnd") LocalDateTime slotEnd,
+            @Param("status") ReservationStatus status,
+            @Param("guestCount") int guestCount
+    );
+
+
 }

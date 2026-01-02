@@ -30,7 +30,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(ValidationFailedException.class)
-    public ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<ApiError> handleIllegalArgumentException(ValidationFailedException e) {
         logger.warn("Validation failed: {}", e.getMessage());
         return buildResponse(e, HttpStatus.BAD_REQUEST);
     }

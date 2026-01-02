@@ -25,6 +25,7 @@ public class RestaurantTable {
         ValidationUtil.requireNonNegativeNumber(floorNumber, "Floor number cannot be negative");
         this.tableNumber = ValidationUtil.requireNonBlank(tableNumber, "Table number cannot be null or blank");
         this.id = tableId;
+        this.numberOfSeats = numberOfSeats;
     }
 
     public static RestaurantTable create(String number, int floorNumber, int numberOfSeats) {
