@@ -1,4 +1,4 @@
-import profile from "../assets/user.png";
+import profile from "../../assets/user.png";
 import './QuickActions.css'
 import {useEffect, useState} from "react";
 

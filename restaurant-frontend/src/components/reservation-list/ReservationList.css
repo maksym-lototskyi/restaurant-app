@@ -1,0 +1,31 @@
+.reservation-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.body{
+    width: 100%;
+    height: 100%;
+}
+
+.reservation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #afafaf;
+    cursor: pointer;
+}
+
+.reservation-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}

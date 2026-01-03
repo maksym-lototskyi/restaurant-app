@@ -39,7 +39,7 @@ button:active{
     border: solid 1px darkgray;
     background: whitesmoke;
     border-radius: 5px;
-    grid-template-rows: 0.3fr auto 0.3fr;
+    grid-template-rows: 10% 80% 10%;
 }
 
 .card-body {

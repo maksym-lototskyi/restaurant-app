@@ -1,9 +1,9 @@
 import './App.css'
-import UserPage from "./components/UserPage.jsx";
+import UserPage from "./components/user-page/UserPage.jsx";
 import {useState} from "react";
 import ReservationDetails from "./components/ReservationDetails.jsx";
-import QuickActions from "./components/QuickActions.jsx";
-import NabBar from "./components/TopBanner.jsx";
+import QuickActions from "./components/header/QuickActions.jsx";
+import NabBar from "./components/header/TopBanner.jsx";
 
 function App() {
     const [view, setView] = useState("home");
@@ -16,8 +16,8 @@ function App() {
 
     return (
         <>
+            <QuickActions/>
             <header>
-                <QuickActions/>
                 {view === 'home' ? <NabBar/> : null}
             </header>
             <main>
