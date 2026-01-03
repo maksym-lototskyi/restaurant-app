@@ -30,11 +30,10 @@ public class GetAvailableTimeSlotsUseCase {
         if(preferredStartTime.isBefore(OPENING_TIME) || preferredStartTime.isAfter(CLOSING_TIME.minusHours(SLOT_DURATION)))
             throw new ValidationFailedException("Preferred start time must be within restaurant operating hours");
 
-
         List<LocalTime> availableTimeSlots = new ArrayList<>();
         long allTables = tableRepository.countByNumberOfGuests(numberOfGuests);
 
-        for(LocalTime time = findStartTime(preferredStartTime);
+        for(LocalTime time = findStartTime(date, preferredStartTime);
             !time.isAfter(CLOSING_TIME) && !time.plusHours(SLOT_DURATION).isAfter(CLOSING_TIME);
             time = time.plusMinutes(15)){
 
@@ -52,8 +51,18 @@ public class GetAvailableTimeSlotsUseCase {
         return availableTimeSlots.subList(fromIndex, toIndex);
     }
 
-    private static LocalTime findStartTime(LocalTime preferredStartTime){
-        LocalTime time = LocalTime.of(preferredStartTime.getHour(), 15 * ((preferredStartTime.getMinute() / 15) + 1));
+    private static LocalTime findStartTime(LocalDate date, LocalTime preferredStartTime){
+        if(date.equals(LocalDate.now())){
+            LocalTime now = LocalTime.now();
+            if(preferredStartTime.isBefore(now)){
+                preferredStartTime = now;
+            }
+        }
+
+        int minutes = preferredStartTime.getMinute() % 15 == 0 ? preferredStartTime.getMinute() : 15 * ((preferredStartTime.getMinute() / 15) + 1);
+
+        LocalTime time = LocalTime.of(preferredStartTime.getHour(), 0);
+        time = time.plusMinutes(minutes);
 
         return time.isBefore(OPENING_TIME) ? OPENING_TIME : time.isAfter(CLOSING_TIME.minusHours(SLOT_DURATION)) ? CLOSING_TIME : time;
     }
