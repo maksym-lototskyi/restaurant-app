@@ -25,17 +25,17 @@ public class GetAvailableTimeSlotsUseCase {
         this.tableRepository = tableRepository;
     }
 
-    public List<LocalTime> execute(LocalDateTime startTime, int numberOfGuests, int pageNumber, int pageSize){
-        if(startTime.isBefore(LocalDateTime.now())) throw new ValidationFailedException("Start time must not be in the past");
-        if(!startTime.toLocalTime().isBefore(CLOSING_TIME)) throw new ValidationFailedException("Start time must be before closing time");
-        if(startTime.toLocalTime().isBefore(OPENING_TIME)) throw new ValidationFailedException("Start time must be after opening time");
+    public List<LocalTime> execute(LocalDate date, LocalTime preferredStartTime, int numberOfGuests, int pageNumber, int pageSize){
+        if(date.isBefore(LocalDate.now())) throw new ValidationFailedException("Start date must not be in the past");
+        if(preferredStartTime.isBefore(OPENING_TIME) || preferredStartTime.isAfter(CLOSING_TIME.minusHours(SLOT_DURATION)))
+            throw new ValidationFailedException("Preferred start time must be within restaurant operating hours");
+
 
         List<LocalTime> availableTimeSlots = new ArrayList<>();
-        LocalDate date = startTime.toLocalDate();
         long allTables = tableRepository.countByNumberOfGuests(numberOfGuests);
 
-        for(LocalTime time = startTime.toLocalTime();
-            !time.plusHours(SLOT_DURATION).isAfter(CLOSING_TIME);
+        for(LocalTime time = findStartTime(preferredStartTime);
+            !time.isAfter(CLOSING_TIME) && !time.plusHours(SLOT_DURATION).isAfter(CLOSING_TIME);
             time = time.plusMinutes(15)){
 
             LocalDateTime slotStart = LocalDateTime.of(date, time);
@@ -50,5 +50,11 @@ public class GetAvailableTimeSlotsUseCase {
         int toIndex = Math.min(fromIndex + pageSize, totalSlots);
 
         return availableTimeSlots.subList(fromIndex, toIndex);
+    }
+
+    private static LocalTime findStartTime(LocalTime preferredStartTime){
+        LocalTime time = LocalTime.of(preferredStartTime.getHour(), 15 * ((preferredStartTime.getMinute() / 15) + 1));
+
+        return time.isBefore(OPENING_TIME) ? OPENING_TIME : time.isAfter(CLOSING_TIME.minusHours(SLOT_DURATION)) ? CLOSING_TIME : time;
     }
 }

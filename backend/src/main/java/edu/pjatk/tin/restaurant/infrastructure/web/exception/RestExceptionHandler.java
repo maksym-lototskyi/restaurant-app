@@ -4,6 +4,7 @@ import edu.pjatk.tin.restaurant.application.reservation.ReservationCollisionExce
 import edu.pjatk.tin.restaurant.util.validation.ValidationFailedException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,12 @@ public class RestExceptionHandler {
     @ExceptionHandler(ValidationFailedException.class)
     public ResponseEntity<ApiError> handleIllegalArgumentException(ValidationFailedException e) {
         logger.warn("Validation failed: {}", e.getMessage());
+        return buildResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiError> handleConstraintViolationException(ConstraintViolationException e) {
+        logger.warn("Constraint violation: {}", e.getMessage());
         return buildResponse(e, HttpStatus.BAD_REQUEST);
     }
 
