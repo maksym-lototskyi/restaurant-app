@@ -5,13 +5,14 @@ import edu.pjatk.tin.restaurant.domain.restaurant_user.Email;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.Password;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUser;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserRepository;
+import edu.pjatk.tin.restaurant.domain.restaurant_user.Role;
 import jakarta.persistence.EntityExistsException;
 
 @UseCase
-public class CreateUserUseCase {
+public class RegisterUserUseCase {
     private final RestaurantUserRepository userRepository;
 
-    public CreateUserUseCase(RestaurantUserRepository userRepository) {
+    public RegisterUserUseCase(RestaurantUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -19,7 +20,7 @@ public class CreateUserUseCase {
         if(userRepository.existsByEmail(email))
             throw new EntityExistsException("User with email " + email.value() + " already exists");
 
-        RestaurantUser user = RestaurantUser.create(firstName, lastName, email, password);
+        RestaurantUser user = RestaurantUser.create(firstName, lastName, email, password, Role.USER);
         RestaurantUser savedUser = userRepository.save(user);
 
         return UserMapper.toDetails(savedUser);
