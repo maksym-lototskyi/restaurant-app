@@ -1,4 +1,4 @@
-function Dialog({isOpen, onClose, onConfirm, title, content}) {
+function Dialog({isOpen, onClose, onConfirm, title, children}) {
     if (!isOpen) {
         return null;
     }
@@ -7,7 +7,7 @@ function Dialog({isOpen, onClose, onConfirm, title, content}) {
             <div className="dialog card-container">
                 <h1 className="card-header">{title}</h1>
                 <div className="card-body center-aligned">
-                    <p>{content}</p>
+                    {children}
                 </div>
                 <div className="card-footer">
                     <button className="secondary-button" onClick={onClose}>Close</button>

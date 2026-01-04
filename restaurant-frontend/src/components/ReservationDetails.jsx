@@ -90,7 +90,8 @@ function ReservationDetails({id, onBack}) {
     return (
         <section className="card-container center">
             <Dialog isOpen={showDialog} onClose={() => {setShowDialog(false)}} onConfirm={handleReservationCancelConfirm}
-                    title="Confirmation" content="Are you sure you want to cancel the reservation?">
+                    title="Confirmation">
+                <p>Are you sure you want to cancel the reservation?</p>
             </Dialog>
             {loading ? (
                 <p>Loading...</p>

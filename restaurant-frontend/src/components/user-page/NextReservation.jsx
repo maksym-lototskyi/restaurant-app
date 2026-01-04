@@ -1,13 +1,15 @@
 import Field from "../Field.jsx";
 import SecondaryButton from "../SecondaryButton.jsx";
 import {useEffect, useState} from "react";
+import {useRefresh} from "./RefreshContext.jsx";
 
-export default function NextReservation({onViewDetails}) {
+export default function NextReservation({onViewDetails, customerId}) {
     const [nextReservation, setNextReservation] = useState(null);
     const [loadingReservation, setLoadingReservation] = useState(true);
+    const {version} = useRefresh();
 
     useEffect(() => {
-        fetch("http://localhost:8080/reservations/2fcfbf0e-e836-49e6-bfb1-95167ee7deed/next")
+        fetch(`http://localhost:8080/reservations/${customerId}/next`)
             .then(res => {
                 if (res.ok) {
                     return res.json();
@@ -28,7 +30,7 @@ export default function NextReservation({onViewDetails}) {
                 setNextReservation(null);
                 setLoadingReservation(false);
             });
-    }, []);
+    }, [customerId, version]);
 
     let start;
     let end;

@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {useRefresh} from "../user-page/RefreshContext.jsx";
 import PaginationControls from "./PaginationControls.jsx";
 import ReservationListItem from "./ReservationListItem.jsx";
 import './ReservationList.css';
@@ -9,6 +10,7 @@ function ReservationList({customerId, onSelect}) {
     const [reservations, setReservations] = useState([]);
     const [page, setPage] = useState(0);
     const [loading, setLoading] = useState(true);
+    const {version} = useRefresh();
 
     useEffect(() => {
         fetch(`http://localhost:8080/reservations/user/${customerId}`)
@@ -21,10 +23,9 @@ function ReservationList({customerId, onSelect}) {
                 console.error(err);
                 setLoading(false);
             });
-    }, [customerId]);
+    }, [customerId, version]);
 
     if (loading) return <p>Loading reservations...</p>;
-    if (reservations.length === 0) return <p>No reservations found</p>;
 
     const totalPages = Math.ceil(reservations.length / PAGE_SIZE);
     const startIndex = page * PAGE_SIZE;
@@ -37,11 +38,13 @@ function ReservationList({customerId, onSelect}) {
         <section className="grid-item1 card-container">
             <h3 className="card-header center-aligned">Your reservations</h3>
             <div className="body">
-                <ul className="reservation-list">
-                    {currentPageData.map(res => (
-                        <ReservationListItem key={res.id} reservation={res} onClick={() => onSelect?.(res.id)}/>
-                    ))}
-                </ul>
+                {reservations.length === 0 ? <p>No reservations found</p> :
+                    <ul className="reservation-list">
+                        {currentPageData.map(res => (
+                            <ReservationListItem key={res.id} reservation={res} onClick={() => onSelect?.(res.id)}/>
+                        ))}
+                    </ul>
+                }
             </div>
             <div className="card-footer">
                 <PaginationControls

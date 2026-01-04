@@ -1,13 +1,18 @@
 import './App.css'
 import UserPage from "./components/user-page/UserPage.jsx";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import ReservationDetails from "./components/ReservationDetails.jsx";
 import QuickActions from "./components/header/QuickActions.jsx";
-import NabBar from "./components/header/TopBanner.jsx";
+import TopBanner from "./components/header/TopBanner.jsx";
 
 function App() {
     const [view, setView] = useState("home");
     const [selectedReservationId, setSelectedReservationId] = useState(null);
+    const targetRef = useRef(null);
+
+    const scrollToTarget = () => {
+        targetRef.current?.scrollIntoView({ behavior: "smooth"});
+    };
 
     const handleViewDetails = (id) => {
         setSelectedReservationId(id);
@@ -18,10 +23,10 @@ function App() {
         <>
             <QuickActions/>
             <header>
-                {view === 'home' ? <NabBar/> : null}
+                {view === 'home' ? <TopBanner scrollToTarget={scrollToTarget}/> : null}
             </header>
             <main>
-                {view === 'home' && <UserPage onViewDetails={handleViewDetails} />}
+                {view === 'home' && <UserPage onViewDetails={handleViewDetails} refProp={targetRef} customerId="bba7d89e-70bf-4d12-a482-62ee662b662e"/>}
                 {view === 'reservation' && selectedReservationId && (
                     <ReservationDetails id={selectedReservationId} onBack={() => setView("home")} />
                 )}
