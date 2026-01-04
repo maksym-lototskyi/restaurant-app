@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {formatDate, findClosestDate, formatTime} from "../../util.jsx"
+import {formatDate, findClosestDate, formatTime} from "../../util/date-time-util.jsx"
 import TimeSelector from "./TimeSelector.jsx";
 import DateSelector from "./DateSelector.jsx";
 import GuestSelector from "./GuestSelector.jsx";
@@ -9,7 +9,7 @@ import ReservationSummary from "./ReservationSummary.jsx";
 import {useRefresh} from "./RefreshContext.jsx";
 
 
-function MakeReservation({customerId}) {
+function MakeReservation() {
     const [time, setTime] = useState(formatTime(findClosestDate()));
     const [guests, setGuests] = useState(1);
     const [date, setDate] = useState(formatDate(findClosestDate()));
@@ -35,12 +35,11 @@ function MakeReservation({customerId}) {
     const handleReservationCreate = async () => {
         setShowDialog(false);
 
-        const res = await fetch("http://localhost:8080/reservations",
+        const res = await fetch("http://localhost:8080/reservations/",
             {method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(
-                    {customerId : customerId,
-                        reservationStart: `${date}T${selectedTimeSlot}`,
+                    {reservationStart: `${date}T${selectedTimeSlot}`,
                         numberOfGuests: guests}
                 )
             });
@@ -52,6 +51,7 @@ function MakeReservation({customerId}) {
     return (<>
         <Dialog isOpen={showDialog} onClose={() => {setShowDialog(false)}} onConfirm={handleReservationCreate}
                 title="You are almost done">
+            <p>Please confirm the details below</p>
             <ReservationSummary time={selectedTimeSlot} date={date} guests={guests}></ReservationSummary>
         </Dialog>
         <h3 className="card-header center-aligned">Make a reservation</h3>

@@ -2,14 +2,18 @@ import Field from "../Field.jsx";
 import SecondaryButton from "../SecondaryButton.jsx";
 import {useEffect, useState} from "react";
 import {useRefresh} from "./RefreshContext.jsx";
+import {useNavigate} from "react-router-dom";
 
-export default function NextReservation({onViewDetails, customerId}) {
+export default function NextReservation() {
     const [nextReservation, setNextReservation] = useState(null);
     const [loadingReservation, setLoadingReservation] = useState(true);
     const {version} = useRefresh();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/reservations/${customerId}/next`)
+        fetch(`http://localhost:8080/reservations/next`,{
+            credentials: "include"
+        })
             .then(res => {
                 if (res.ok) {
                     return res.json();
@@ -30,7 +34,7 @@ export default function NextReservation({onViewDetails, customerId}) {
                 setNextReservation(null);
                 setLoadingReservation(false);
             });
-    }, [customerId, version]);
+    }, [version]);
 
     let start;
     let end;
@@ -58,7 +62,7 @@ export default function NextReservation({onViewDetails, customerId}) {
                 </div>
                 {nextReservation ?
                     <div className="card-footer">
-                        <SecondaryButton onClick={() => onViewDetails(nextReservation.id)}>View Details</SecondaryButton>
+                        <SecondaryButton onClick={() => navigate(`/reservations/${nextReservation.id}`)}>View Details</SecondaryButton>
                     </div> : null}
             </>
         }

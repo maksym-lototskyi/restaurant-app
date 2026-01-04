@@ -1,0 +1,41 @@
+import InputField from "./InputField.jsx";
+import {useState} from "react";
+import SecondaryButton from "./SecondaryButton.jsx";
+import {useNavigate} from "react-router-dom";
+
+export default function Login(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async () => {
+        try{
+            await fetch("http://localhost:8080/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                credentials: "include",
+                body: new URLSearchParams({
+                    username: email,
+                    password: password
+                })
+            });
+            navigate("/");
+        }
+        catch (err){
+            console.log(err);
+        }
+    }
+
+    return <div className="card-container center">
+        <h2 className="card-header">Login</h2>
+        <div className="card-body">
+            <InputField inputType="text" label="Username" value={email} handleChange={(e) => setEmail(e.target.value)}></InputField>
+            <InputField inputType="password" label="Password" value={password} handleChange={(e) => setPassword(e.target.value)}></InputField>
+        </div>
+        <div className="card-footer">
+            <SecondaryButton onClick={handleSubmit}>Submit</SecondaryButton>
+        </div>
+    </div>
+}

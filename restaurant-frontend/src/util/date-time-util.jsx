@@ -8,6 +8,10 @@ export function findClosestDate() {
         date.setDate(date.getDate() + 1);
         date.setHours(8, 0, 0, 0);
     }
+
+    if(date.getHours() < 8){
+        date.setHours(8, 0, 0, 0);
+    }
     return date;
 }
 

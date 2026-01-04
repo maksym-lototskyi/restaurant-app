@@ -6,7 +6,7 @@ function Dialog({isOpen, onClose, onConfirm, title, children}) {
         <div className="dialog-container">
             <div className="dialog card-container">
                 <h1 className="card-header">{title}</h1>
-                <div className="card-body center-aligned">
+                <div className="card-body start-aligned">
                     {children}
                 </div>
                 <div className="card-footer">

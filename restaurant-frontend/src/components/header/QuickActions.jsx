@@ -1,9 +1,11 @@
-import profile from "../../assets/user.png";
 import './QuickActions.css'
+import {FiUser} from "react-icons/fi";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 function QuickActions(){
     const [isScrolled, setIsScrolled] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScrolled = () =>{
@@ -17,10 +19,10 @@ function QuickActions(){
     }, []);
 
     return (<div className={`quick-actions ${isScrolled ? 'scrolled' : ''}`}>
-        <button>Login</button>
+        <button onClick={() => navigate("/login")}>Login</button>
         <button>Register</button>
         <button>
-            <img src={profile} alt="Profile"/>
+            <FiUser size={24}/>
         </button>
     </div>)
 }

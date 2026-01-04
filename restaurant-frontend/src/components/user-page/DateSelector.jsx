@@ -1,5 +1,5 @@
 import {FiCalendar} from "react-icons/fi";
-import {extractDateFromString, formatTime} from "../../util.jsx";
+import {extractDateFromString, formatTime} from "../../util/date-time-util.jsx";
 
 export default function DateSelector({date, setDate, setTime}){
     return <div className="wrapper date">

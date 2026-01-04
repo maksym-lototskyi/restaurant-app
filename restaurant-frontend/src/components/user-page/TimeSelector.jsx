@@ -1,5 +1,5 @@
 import {FiChevronDown, FiClock} from "react-icons/fi";
-import {extractDateFromString, extractHoursFromTimeString, formatTime} from "../../util.jsx";
+import {extractDateFromString, extractHoursFromTimeString, formatTime} from "../../util/date-time-util.jsx";
 
 export default function TimeSelector({date, time, setTime, type}) {
     return <div className={`wrapper ${type === 'select' ? 'select' : ''}`}>

@@ -2,13 +2,16 @@ import Field from "./Field.jsx";
 import InputField from "./InputField.jsx";
 import {useEffect, useState} from "react";
 import Dialog from "./Dialog.jsx";
+import {useNavigate, useParams} from "react-router-dom";
 
-function ReservationDetails({id, onBack}) {
+function ReservationDetails() {
     const [reservation, setReservation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
+    const {id} = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:8080/reservations/${id}`)
@@ -55,11 +58,10 @@ function ReservationDetails({id, onBack}) {
                     method: "PUT"
                 });
             if(response.ok){
-                onBack();
+                navigate("/");
             }
         }catch (error) {
             console.error(error);
-            alert("Could not cancel reservation. Please try again.");
         }
 
     }
@@ -141,7 +143,7 @@ function ReservationDetails({id, onBack}) {
                             <button className="secondary-button" onClick={handleCancelEdit}>Cancel</button>
                         </>) :
                         (<>
-                            <button className="secondary-button" onClick={onBack}>Back</button>
+                            <button className="secondary-button" onClick={() => navigate("/")}>Back</button>
                             <button className="secondary-button" onClick={handleReschedule}>Reschedule</button>
                             <button className="secondary-button cancel-button" onClick={handleShowDialog}>Cancel</button>
                         </>)}
