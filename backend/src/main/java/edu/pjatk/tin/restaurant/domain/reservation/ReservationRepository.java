@@ -2,6 +2,8 @@ package edu.pjatk.tin.restaurant.domain.reservation;
 
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,16 +30,23 @@ public interface ReservationRepository extends JpaRepository<Reservation, Reserv
             @Param("status") ReservationStatus status
     );
 
+    @Query("""
+        SELECT r FROM Reservation r
+        WHERE r.customerId = :customerId
+        AND r.timeSlot.startTime > :now
+        AND r.status = :status
+    """)
 
-    List<Reservation> findByCustomerId(RestaurantUserId customerId);
+    List<Reservation> findAllByCustomerIdAndStatus(RestaurantUserId customerId, LocalDateTime now, ReservationStatus status, Sort sort);
+
     @Query("""
     SELECT r FROM Reservation r
     WHERE r.customerId = :customerId
-    AND r.timeSlot.startTime > CURRENT_TIMESTAMP
+    AND r.timeSlot.startTime > :now
     AND r.status = :status
     ORDER BY r.timeSlot.startTime ASC
 """)
-    Optional<Reservation> findNextReservationByCustomerId(@Param("customerId") RestaurantUserId customerId, @Param("status") ReservationStatus status);
+    List<Reservation> findNextReservationByCustomerId(@Param("customerId") RestaurantUserId customerId, @Param("status") ReservationStatus status, LocalDateTime now, Pageable pageable);
 
     @Query("""
     SELECT COUNT(DISTINCT r.tableId)

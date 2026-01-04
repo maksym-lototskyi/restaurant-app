@@ -40,7 +40,6 @@ public class ReservationController {
     public ResponseEntity<ReservationSummary> createReservation(@Valid @RequestBody CreateReservationDto dto) {
         ReservationSummary reservationSummary = createReservationUseCase.execute(
                 RestaurantUserId.of(dto.customerId()),
-                RestaurantTableId.of(dto.tableId()),
                 TimeSlot.of(dto.reservationStart()),
                 dto.numberOfGuests()
         );
