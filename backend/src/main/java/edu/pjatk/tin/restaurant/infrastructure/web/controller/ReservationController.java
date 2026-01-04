@@ -6,9 +6,11 @@ import edu.pjatk.tin.restaurant.domain.reservation.TimeSlot;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateReservationDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.security.CustomUserPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -37,9 +39,11 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationSummary> createReservation(@Valid @RequestBody CreateReservationDto dto) {
+    public ResponseEntity<ReservationSummary> createReservation(@Valid @RequestBody CreateReservationDto dto, Authentication authentication) {
+        CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
+
         ReservationSummary reservationSummary = createReservationUseCase.execute(
-                RestaurantUserId.of(dto.customerId()),
+                RestaurantUserId.of(customUserPrincipal.getId()),
                 TimeSlot.of(dto.reservationStart()),
                 dto.numberOfGuests()
         );
@@ -70,15 +74,18 @@ public class ReservationController {
         return ResponseEntity.ok(reservationDetails);
     }
 
-    @GetMapping("/user/{customerId}")
-    public ResponseEntity<List<ReservationSummary>> getUserReservations(@PathVariable("customerId") UUID customerId) {
-        List<ReservationSummary> reservations = getUserReservationsUseCase.execute(RestaurantUserId.of(customerId));
+    @GetMapping("/customer")
+    public ResponseEntity<List<ReservationSummary>> getUserReservations(Authentication authentication) {
+        CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
+        List<ReservationSummary> reservations = getUserReservationsUseCase.execute(RestaurantUserId.of(customUserPrincipal.getId()));
         return ResponseEntity.ok(reservations);
     }
 
-    @GetMapping("/{customerId}/next")
-    public ResponseEntity<ReservationSummary> getNextReservation(@PathVariable("customerId") UUID customerId) {
-        ReservationSummary nextReservation = getNextReservationUseCase.execute(RestaurantUserId.of(customerId));
+    @GetMapping("/next")
+    public ResponseEntity<ReservationSummary> getNextReservation(Authentication authentication) {
+        CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
+
+        ReservationSummary nextReservation = getNextReservationUseCase.execute(RestaurantUserId.of(customUserPrincipal.getId()));
         return ResponseEntity.ok(nextReservation);
     }
 

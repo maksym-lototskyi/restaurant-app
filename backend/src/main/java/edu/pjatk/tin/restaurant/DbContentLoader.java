@@ -54,14 +54,11 @@ public class DbContentLoader implements CommandLineRunner {
     }
 
     private List<RestaurantUser> seedUsers() {
-        List<RestaurantUser> users = IntStream.range(0, SEED_SIZE)
-                .mapToObj(i -> RestaurantUser.create(
-                        "User" + i,
-                        "Test",
-                        Email.of("user" + i + "@example.com"),
-                        Password.fromRaw("Password123!", passwordHasher)
-                ))
-                .toList();
+        List<RestaurantUser> users = new ArrayList<>();
+        RestaurantUser user = RestaurantUser.create("john", "doe", Email.of("john.doe@gmail.com"), Password.fromRaw("12345678fG-", passwordHasher), Role.USER);
+        RestaurantUser admin = RestaurantUser.create("admin", "kowalski", Email.of("admin@gmail.com"), Password.fromRaw("12345678fG-", passwordHasher), Role.ADMIN);
+        users.add(user);
+        users.add(admin);
 
         return userRepository.saveAll(users);
     }
@@ -97,7 +94,7 @@ public class DbContentLoader implements CommandLineRunner {
                             )
                                     .plusDays(3)
                     ),
-                    users.get(i % users.size()).getId(),
+                    users.getFirst().getId(),
                     tables.get(i % tables.size()).getId(),
                     2
             ));

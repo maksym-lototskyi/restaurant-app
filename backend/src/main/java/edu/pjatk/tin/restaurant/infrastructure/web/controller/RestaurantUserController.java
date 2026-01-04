@@ -16,15 +16,15 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 public class RestaurantUserController {
-    private final CreateUserUseCase createUserUseCase;
+    private final RegisterUserUseCase registerUserUseCase;
     private final UpdateProfileUseCase updateProfileUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetUserPageUseCase getUserPageUseCase;
     private final GetUserProfileDetailsUseCase getUserDetailsUseCase;
     private final PasswordHasher passwordHasher;
 
-    public RestaurantUserController(CreateUserUseCase createUserUseCase, UpdateProfileUseCase updateProfileUseCase, DeleteUserUseCase deleteUserUseCase, GetUserPageUseCase getUserPageUseCase, GetUserProfileDetailsUseCase getUserDetailsUseCase, PasswordHasher passwordHasher) {
-        this.createUserUseCase = createUserUseCase;
+    public RestaurantUserController(RegisterUserUseCase registerUserUseCase, UpdateProfileUseCase updateProfileUseCase, DeleteUserUseCase deleteUserUseCase, GetUserPageUseCase getUserPageUseCase, GetUserProfileDetailsUseCase getUserDetailsUseCase, PasswordHasher passwordHasher) {
+        this.registerUserUseCase = registerUserUseCase;
         this.updateProfileUseCase = updateProfileUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
         this.getUserPageUseCase = getUserPageUseCase;
@@ -34,7 +34,7 @@ public class RestaurantUserController {
 
     @PostMapping
     public ResponseEntity<RestaurantUserDetails> createUser(@Valid @RequestBody CreateUserDto dto) {
-        RestaurantUserDetails userDetails = createUserUseCase.execute(
+        RestaurantUserDetails userDetails = registerUserUseCase.execute(
                 dto.firstName(),
                 dto.lastName(),
                 Email.of(dto.email()),

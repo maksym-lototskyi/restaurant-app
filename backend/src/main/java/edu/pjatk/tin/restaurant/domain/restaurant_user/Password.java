@@ -10,7 +10,7 @@ public class Password {
     private static final String DIGIT = ".*\\d.*";
     private static final String LOWER = ".*[a-z].*";
     private static final String UPPER = ".*[A-Z].*";
-    private static final String SPECIAL = ".*[!@#$%^&*()].*";
+    private static final String SPECIAL = ".*[!@#$%^&*()/.-].*";
 
     private String hashedValue;
 
@@ -38,6 +38,10 @@ public class Password {
         ValidationUtil.requireCorrectStringRegex(password, LOWER, "Password must contain at least one lowercase letter");
         ValidationUtil.requireCorrectStringRegex(password, UPPER, "Password must contain at least one uppercase letter");
         ValidationUtil.requireCorrectStringRegex(password, SPECIAL, "Password must contain at least one special character");
+    }
+
+    public String hashedValue() {
+        return hashedValue;
     }
 
     @Override

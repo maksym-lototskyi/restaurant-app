@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record CreateReservationDto(
-        @NonNull UUID customerId,
         @NonNull @FutureOrPresent LocalDateTime reservationStart,
         @Positive int numberOfGuests
 ) {

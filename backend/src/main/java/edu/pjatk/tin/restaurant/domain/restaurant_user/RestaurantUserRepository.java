@@ -3,6 +3,8 @@ package edu.pjatk.tin.restaurant.domain.restaurant_user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface RestaurantUserRepository extends JpaRepository<RestaurantUser, RestaurantUserId> {
 
     boolean existsByEmail(Email email);
@@ -12,4 +14,7 @@ public interface RestaurantUserRepository extends JpaRepository<RestaurantUser, 
         AND ru.id <> :userId
     """)
     boolean existsByEmailExceptSelf(RestaurantUserId userId, Email email);
+
+
+    Optional<RestaurantUser> findByEmail_Value(String email);
 }

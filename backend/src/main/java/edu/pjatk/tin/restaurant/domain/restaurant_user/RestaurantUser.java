@@ -23,8 +23,11 @@ public class RestaurantUser {
     @AttributeOverride(name = "hashedValue", column = @Column(name = "password", nullable = false))
     private Password password;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public RestaurantUser(RestaurantUserId id, String firstName, String lastName, Email email, Password password) {
+
+    public RestaurantUser(RestaurantUserId id, String firstName, String lastName, Email email, Password password, Role role) {
         this.id = ValidationUtil.requireNonNull(id, "User ID cannot be null");
         this.firstName = ValidationUtil.requireNonBlank(firstName, "First name cannot be null or blank");
         ValidationUtil.requireValueInRange(firstName.length(), 1, 50, "First name must be between 1 and 50 characters");
@@ -32,13 +35,14 @@ public class RestaurantUser {
         ValidationUtil.requireValueInRange(lastName.length(), 1, 50, "Last name must be between 1 and 50 characters");
         this.email = ValidationUtil.requireNonNull(email, "Email cannot be null");
         this.password = ValidationUtil.requireNonNull(password, "Password cannot be null");
+        this.role = ValidationUtil.requireNonNull(role, "Role cannot be null");
     }
 
     protected RestaurantUser() {
     }
 
-    public static RestaurantUser create(String firstName, String lastName, Email email, Password password) {
-        return new RestaurantUser(RestaurantUserId.generate(), firstName, lastName, email, password);
+    public static RestaurantUser create(String firstName, String lastName, Email email, Password password, Role role) {
+        return new RestaurantUser(RestaurantUserId.generate(), firstName, lastName, email, password, role);
     }
 
     public void changeFirstName(String firstName) {
@@ -75,5 +79,9 @@ public class RestaurantUser {
 
     public Password getPassword() {
         return password;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }
