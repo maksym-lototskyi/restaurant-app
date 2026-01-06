@@ -1,8 +1,9 @@
 import Field from "./Field.jsx";
-import InputField from "./InputField.jsx";
 import {useEffect, useState} from "react";
 import Dialog from "./Dialog.jsx";
 import {useNavigate, useParams} from "react-router-dom";
+import {cancelReservation, editReservation} from "../api.js";
+import TimeSlotsSelector from "./user-page/TimeSlotsSelector.jsx";
 
 function ReservationDetails() {
     const [reservation, setReservation] = useState(null);
@@ -14,7 +15,7 @@ function ReservationDetails() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/reservations/${id}`)
+        fetch(`http://localhost:8080/reservations/${id}`, {credentials: "include"})
             .then(res => res.json())
             .then(data => {
                 setReservation(data);
@@ -24,46 +25,12 @@ function ReservationDetails() {
     }, [id]);
 
     const handleEditConfirm = async () => {
-        try {
-            const response = await fetch(
-                `http://localhost:8080/reservations/${reservation.id}/reschedule?newStartTime=${form.reservationStart}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error("Failed to update reservation");
-            }
-
-            const updatedReservation = await response.json();
-
-            setReservation(updatedReservation);
-            setForm(updatedReservation);
-            setIsEdit(false);
-
-        } catch (error) {
-            console.error(error);
-            alert("Could not update reservation. Please try again.");
-        }
+        await editReservation(reservation.id, form.reservationStart, setReservation, setForm, setIsEdit);
     };
 
     const handleReservationCancelConfirm = async () => {
-        try{
-            const response = await fetch(`http://localhost:8080/reservations/${reservation.id}/cancel`,
-                {
-                    method: "PUT"
-                });
-            if(response.ok){
-                navigate("/");
-            }
-        }catch (error) {
-            console.error(error);
-        }
-
+        await cancelReservation(reservation.id);
+        navigate("/");
     }
 
     const handleReschedule = () => {
@@ -77,7 +44,6 @@ function ReservationDetails() {
     const handleChange = (e) => {
         setForm({...form, [e.target.name] : e.target.value});
         e.target.value = '';
-        console.log(form);
     }
 
     const handleShowDialog = () => {
@@ -101,7 +67,7 @@ function ReservationDetails() {
                 <h2 className="card-header">Reservation Details</h2>
 
                 <div className="card-body start-aligned">
-                    {isEdit ? <InputField label="Date and Time" name="reservationStart" value={form.reservationStart} inputType="datetime-local" handleChange={handleChange} /> :
+                    {isEdit ? <TimeSlotsSelector handleChange={handleChange} /> :
                         <>
                             <Field label="Date:">
                                 {start.toLocaleDateString()}
@@ -143,7 +109,7 @@ function ReservationDetails() {
                             <button className="secondary-button" onClick={handleCancelEdit}>Cancel</button>
                         </>) :
                         (<>
-                            <button className="secondary-button" onClick={() => navigate("/")}>Back</button>
+                            <button className="secondary-button" onClick={() => navigate(-1)}>Back</button>
                             <button className="secondary-button" onClick={handleReschedule}>Reschedule</button>
                             <button className="secondary-button cancel-button" onClick={handleShowDialog}>Cancel</button>
                         </>)}

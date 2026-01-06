@@ -1,3 +1,5 @@
+import SecondaryButton from "./SecondaryButton.jsx";
+
 function Dialog({isOpen, onClose, onConfirm, title, children}) {
     if (!isOpen) {
         return null;
@@ -10,8 +12,8 @@ function Dialog({isOpen, onClose, onConfirm, title, children}) {
                     {children}
                 </div>
                 <div className="card-footer">
-                    <button className="secondary-button" onClick={onClose}>Close</button>
-                    <button className="secondary-button confirm-button" onClick={onConfirm}>Confirm</button>
+                    <SecondaryButton onClick={onClose}>Close</SecondaryButton>
+                    <SecondaryButton type='confirm' className="secondary-button confirm-button" onClick={onConfirm}>Confirm</SecondaryButton>
                 </div>
             </div>
         </div>

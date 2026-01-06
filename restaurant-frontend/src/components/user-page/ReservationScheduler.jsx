@@ -9,7 +9,7 @@ import ReservationSummary from "./ReservationSummary.jsx";
 import {useRefresh} from "./RefreshContext.jsx";
 
 
-function MakeReservation() {
+function ReservationScheduler() {
     const [time, setTime] = useState(formatTime(findClosestDate()));
     const [guests, setGuests] = useState(1);
     const [date, setDate] = useState(formatDate(findClosestDate()));
@@ -21,7 +21,7 @@ function MakeReservation() {
 
     useEffect(() => {
         const params = new URLSearchParams({
-            startDate: date, preferredStartTime: time, numberOfGuests: guests, pageNumber: 0, pageSize: 6
+            startDate: date, preferredStartTime: time, numberOfGuests: guests, pageSize: 6
         });
 
         fetch(`http://localhost:8080/availability?${params.toString()}`)
@@ -35,16 +35,16 @@ function MakeReservation() {
     const handleReservationCreate = async () => {
         setShowDialog(false);
 
-        const res = await fetch("http://localhost:8080/reservations/",
+        const res = await fetch("http://localhost:8080/reservations",
             {method: "POST",
+                credentials : "include",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(
                     {reservationStart: `${date}T${selectedTimeSlot}`,
                         numberOfGuests: guests}
                 )
             });
-        const data = await res.json();
-        console.log(data);
+        await res.json();
         triggerRefresh();
     };
 
@@ -68,4 +68,4 @@ function MakeReservation() {
     </>);
 }
 
-export default MakeReservation;
+export default ReservationScheduler;

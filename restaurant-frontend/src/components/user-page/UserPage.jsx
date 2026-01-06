@@ -1,21 +1,25 @@
 import './UserPage.css'
-import MakeReservation from "./MakeReservation.jsx";
+import ReservationScheduler from "./ReservationScheduler.jsx";
 import NextReservation from "./NextReservation.jsx";
 import ReservationList from "../reservation-list/ReservationList.jsx";
-import {RefreshProvider} from "./RefreshContext.jsx";
 
 function UserPage({refProp}) {
-    return <RefreshProvider>
-        <div className="grid-container">
-            <ReservationList></ReservationList>
-            <section className="grid-item2 card-container">
+    return <div className="grid-container">
+        <ReservationList
+            title="My reservations"
+            fetchReservations={({ page, size }) =>
+                fetch(`/reservations?page=${page}&size=${size}`, {
+                    credentials: "include"
+                }).then(r => r.json())
+            }
+        />
+        <section className="grid-item2 card-container">
                 <NextReservation/>
             </section>
             <section ref={refProp} className="grid-item3">
-                <MakeReservation></MakeReservation>
+                <ReservationScheduler></ReservationScheduler>
             </section>
         </div>
-    </RefreshProvider>
 }
 
 export default UserPage;

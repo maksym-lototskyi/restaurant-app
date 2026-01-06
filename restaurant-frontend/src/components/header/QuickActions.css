@@ -11,7 +11,7 @@
     z-index: 900
 }
 
-.quick-actions button{
+.quick-actions-button{
     background: transparent;
     border: none;
     padding:  0.5rem 0.75rem 0.5rem 0.75rem;
@@ -21,11 +21,6 @@
     text-align: center;
     font-weight: bolder;
     max-height: 40px;
-}
-
-.quick-actions button img{
-    fill: antiquewhite;
-    width: 30px;
 }
 
 .quick-actions.scrolled{

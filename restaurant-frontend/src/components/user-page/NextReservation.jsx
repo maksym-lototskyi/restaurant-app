@@ -3,12 +3,14 @@ import SecondaryButton from "../SecondaryButton.jsx";
 import {useEffect, useState} from "react";
 import {useRefresh} from "./RefreshContext.jsx";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../AuthContext.jsx";
 
 export default function NextReservation() {
     const [nextReservation, setNextReservation] = useState(null);
     const [loadingReservation, setLoadingReservation] = useState(true);
     const {version} = useRefresh();
     const navigate = useNavigate();
+    const {user} = useAuth();
 
     useEffect(() => {
         fetch(`http://localhost:8080/reservations/next`,{
@@ -34,7 +36,7 @@ export default function NextReservation() {
                 setNextReservation(null);
                 setLoadingReservation(false);
             });
-    }, [version]);
+    }, [user, version]);
 
     let start;
     let end;

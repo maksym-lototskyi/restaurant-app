@@ -2,11 +2,13 @@ import InputField from "./InputField.jsx";
 import {useState} from "react";
 import SecondaryButton from "./SecondaryButton.jsx";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../AuthContext.jsx";
 
 export default function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {refreshUser} = useAuth();
 
     const handleSubmit = async () => {
         try{
@@ -21,6 +23,7 @@ export default function Login(){
                     password: password
                 })
             });
+            await refreshUser();
             navigate("/");
         }
         catch (err){
@@ -36,6 +39,7 @@ export default function Login(){
         </div>
         <div className="card-footer">
             <SecondaryButton onClick={handleSubmit}>Submit</SecondaryButton>
+            <SecondaryButton type="cancel" onClick={() => navigate("/")}>Cancel</SecondaryButton>
         </div>
     </div>
 }
