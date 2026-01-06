@@ -18,17 +18,12 @@ header{
     flex-direction: column;
 }
 
-button{
-    border: none;
-    transition: all 0.3s ease;
-}
-
-button:hover{
+.secondary-button:hover{
     transform: translate(-0.25em) scale(1.05);
     box-shadow: 0 0 1em 0 #130a05;
 }
 
-button:active{
+.secondary-button:active{
     transform: scale(1);
     box-shadow: none;
 }
@@ -108,6 +103,8 @@ button:active{
     font-weight: bolder;
     color: #4f574a;
     max-height: 40px;
+    border: none;
+    transition: all 0.3s ease;
 }
 
 .dialog-container {
@@ -136,5 +133,9 @@ button:active{
 
 .secondary-button.cancel-button{
     color: #9f2336;
+}
+
+.secondary-button.quick-actions-button{
+    color: antiquewhite;
 }
 

@@ -31,22 +31,16 @@ function QuickActions() {
 
     return (<nav className={`quick-actions ${isScrolled ? 'scrolled' : ''}`}>
         {!user ? <>
-                <button className="quick-actions-button" onClick={() => navigate("/login")}>Login</button>
-                <button className="quick-actions-button">Register</button>
+                <button className="secondary-button quick-actions-button" onClick={() => navigate("/login")}>Login</button>
+                <button className="secondary-button quick-actions-button">Register</button>
             </> :
             <>
-                {user.roles.includes("ROLE_ADMIN") ?
-                    <>
-                        <button className="quick-actions-button" onClick={() => navigate("/reservations")}>Reservations</button>
-                        <button className="quick-actions-button" onClick={() => navigate("/users")}>Users</button>
-                        <button className="quick-actions-button" onClick={() => navigate("/tables")}>Tables</button>
-                    </> : null}
                 <Dialog isOpen={showDialog} onClose={() => setShowDialog(false)} onConfirm={handleLogout}
                         title="Confirmation">
                     <p>Are you sure you want to logout?</p>
                 </Dialog>
-                <button className="quick-actions-button" onClick={() => setShowDialog(true)}>Logout</button>
-                <button className="quick-actions-button"><FiUser size={24} onClick={() => navigate("/profile")}/>
+                <button className="secondary-button quick-actions-button" onClick={() => setShowDialog(true)}>Logout</button>
+                <button className="secondary-button quick-actions-button"><FiUser size={24} onClick={() => navigate("/profile")}/>
                 </button>
             </>
         }

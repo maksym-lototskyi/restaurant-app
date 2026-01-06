@@ -1,0 +1,19 @@
+.admin-panel{
+    display: grid;
+    padding: 2rem 1.5rem 2rem 1.5rem;
+    border: solid 1px darkgray;
+    background: whitesmoke;
+    border-radius: 5px;
+    grid-template-rows: 10% 80% 10%;
+    width: 80%;
+    min-height: 80vh;
+    justify-self: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.admin-panel-body{
+    width: 100%;
+    min-height: 100%;
+    background: whitesmoke;
+}
