@@ -13,7 +13,7 @@ public class UpdateTableInfoUseCase {
         this.restaurantTableRepository = restaurantTableRepository;
     }
 
-    public TableDetails execute(RestaurantTableId tableId, String newTableNumber, int floorNumber, int numberOfSeats){
+    public TableDetails execute(RestaurantTableId tableId, String newTableNumber, int floorNumber){
         var table = restaurantTableRepository.findById(tableId)
                 .orElseThrow(() -> new IllegalArgumentException("Table with id " + tableId + " not found"));
 
@@ -22,7 +22,6 @@ public class UpdateTableInfoUseCase {
 
         table.changeNumber(newTableNumber);
         table.changeFloor(floorNumber);
-        table.changeNumberOfSeats(numberOfSeats);
 
         return TableMapper.toDetails(restaurantTableRepository.save(table));
     }

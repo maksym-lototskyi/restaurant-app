@@ -3,8 +3,7 @@ package edu.pjatk.tin.restaurant.infrastructure.web.constraint_validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordConstraintValidator
-        implements ConstraintValidator<ValidPassword, String> {
+public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
     private static final String DIGIT   = ".*\\d.*";
     private static final String LOWER   = ".*[a-z].*";

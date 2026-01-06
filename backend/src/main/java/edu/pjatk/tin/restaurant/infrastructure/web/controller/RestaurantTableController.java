@@ -3,7 +3,9 @@ package edu.pjatk.tin.restaurant.infrastructure.web.controller;
 import edu.pjatk.tin.restaurant.application.restaurant_table.*;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateTableDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dto.UpdateTableDto;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +39,11 @@ public class RestaurantTableController {
     }
 
     @PutMapping("/{tableId}")
-    public ResponseEntity<TableDetails> updateTableInfo(@PathVariable("tableId") UUID tableId, @Valid @RequestBody CreateTableDto dto){
+    public ResponseEntity<TableDetails> updateTableInfo(@PathVariable("tableId") UUID tableId, @Valid @RequestBody UpdateTableDto dto){
         TableDetails result = updateTableInfoUseCase.execute(
                 RestaurantTableId.of(tableId),
                 dto.tableNumber(),
-                dto.floorNumber(),
-                dto.numberOfSeats());
+                dto.floorNumber());
         return ResponseEntity.ok(result);
     }
 
@@ -53,8 +54,9 @@ public class RestaurantTableController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TableDetails>> getAllTables(){
-        List<TableDetails> result = getAllTablesUseCase.execute();
+    public ResponseEntity<Page<TableDetails>> getAllTables(@RequestParam(required = false, defaultValue = "0") int page,
+                                                           @RequestParam(required = false, defaultValue = "8") int size){
+        Page<TableDetails> result = getAllTablesUseCase.execute(page, size);
         return ResponseEntity.ok(result);
     }
 

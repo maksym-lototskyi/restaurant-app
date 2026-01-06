@@ -2,7 +2,7 @@ package edu.pjatk.tin.restaurant.application.restaurant_user;
 
 import java.util.UUID;
 
-public record RestaurantUserDetails(
+public record RestaurantUserProfileDetails(
         UUID id,
         String firstName,
         String lastName,

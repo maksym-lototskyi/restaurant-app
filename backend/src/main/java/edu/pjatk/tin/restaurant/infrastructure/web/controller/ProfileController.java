@@ -1,7 +1,7 @@
 package edu.pjatk.tin.restaurant.infrastructure.web.controller;
 
 import edu.pjatk.tin.restaurant.application.restaurant_user.GetUserProfileDetailsUseCase;
-import edu.pjatk.tin.restaurant.application.restaurant_user.RestaurantUserDetails;
+import edu.pjatk.tin.restaurant.application.restaurant_user.RestaurantUserProfileDetails;
 import edu.pjatk.tin.restaurant.application.restaurant_user.UpdateProfileUseCase;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.Email;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.Password;
@@ -35,16 +35,16 @@ public class ProfileController {
     }
 
     @GetMapping
-    public ResponseEntity<RestaurantUserDetails> getUserProfileDetails(Authentication authentication){
+    public ResponseEntity<RestaurantUserProfileDetails> getUserProfileDetails(Authentication authentication){
         CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
         return ResponseEntity.ok(getUserProfileDetailsUseCase.execute(RestaurantUserId.of(customUserPrincipal.getId())));
     }
 
     @PutMapping
-    public ResponseEntity<RestaurantUserDetails> updateUser(Authentication authentication, @Valid @RequestBody UpdateUserDto dto){
+    public ResponseEntity<RestaurantUserProfileDetails> updateUser(Authentication authentication, @Valid @RequestBody UpdateUserDto dto){
         CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
         UUID userId = customUserPrincipal.getId();
-        RestaurantUserDetails userDetails = updateProfileUseCase.execute(
+        RestaurantUserProfileDetails userDetails = updateProfileUseCase.execute(
                 RestaurantUserId.of(userId),
                 dto.firstName(),
                 dto.lastName(),

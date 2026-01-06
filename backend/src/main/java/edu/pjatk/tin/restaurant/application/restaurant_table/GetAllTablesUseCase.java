@@ -2,6 +2,8 @@ package edu.pjatk.tin.restaurant.application.restaurant_table;
 
 import edu.pjatk.tin.restaurant.UseCase;
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -13,10 +15,8 @@ public class GetAllTablesUseCase {
         this.restaurantTableRepository = restaurantTableRepository;
     }
 
-    public List<TableDetails> execute() {
-        return restaurantTableRepository.findAll()
-                .stream()
-                .map(TableMapper::toDetails)
-                .toList();
+    public Page<TableDetails> execute(int page, int size) {
+        return restaurantTableRepository.findAll(PageRequest.of(page, size))
+                .map(TableMapper::toDetails);
     }
 }

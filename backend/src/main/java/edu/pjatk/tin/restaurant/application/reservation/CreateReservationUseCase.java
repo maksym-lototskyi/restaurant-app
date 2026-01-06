@@ -32,7 +32,7 @@ public class CreateReservationUseCase {
         RestaurantTable table = restaurantTableRepository.findAvailableTable(timeSlot.startTime(), timeSlot.endTime(), numberOfGuests, PageRequest.of(0, 1))
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Table with id " + customerId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Available table not found for the given time slot"));
 
         Reservation reservation = Reservation.create(timeSlot, customerId, table.getId(), numberOfGuests);
 

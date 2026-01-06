@@ -12,7 +12,7 @@ public class GetUserProfileDetailsUseCase {
         this.userRepository = userRepository;
     }
 
-    public RestaurantUserDetails execute(RestaurantUserId userId) {
+    public RestaurantUserProfileDetails execute(RestaurantUserId userId) {
         return userRepository.findById(userId)
                 .map(UserMapper::toDetails)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
