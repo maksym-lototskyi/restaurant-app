@@ -7,9 +7,10 @@ import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Login from "./components/Login.jsx";
 import {useRef} from "react";
 import {useAuth} from "./AuthContext.jsx";
-import UserProfile from "./components/UserProfile.jsx";
+import UserProfile from "./components/profile/UserProfile.jsx";
 import {RefreshProvider} from "./components/user-page/RefreshContext.jsx";
 import AdminPanel from "./components/admin-panel/AdminPanel.jsx";
+import TableDetails from "./components/TableDetails.jsx";
 
 function App() {
     const targetRef = useRef(null);
@@ -34,6 +35,7 @@ function App() {
                         }/>
                         <Route path="/profile" element={<UserProfile/>}/>
                         <Route path="/reservations/:id" element={<ReservationDetails/>}/>
+                        <Route path="/tables/:id" element={<TableDetails/>}/>
                         <Route path="/login" element={<Login/>}/>
                     </Routes>
                 </RefreshProvider>

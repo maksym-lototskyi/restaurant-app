@@ -14,33 +14,10 @@ export async function cancelReservation(id){
     try{
         await fetch(`http://localhost:8080/reservations/${id}/cancel`,
             {
+                credentials : "include",
                 method: "PUT"
             });
     }catch (error) {
-        console.error(error);
-    }
-}
-
-export async function editReservation(id, reservationStart, setReservation, setForm, setIsEdit){
-    try {
-        const response = await fetch(
-            `http://localhost:8080/reservations/${id}/reschedule?newStartTime=${reservationStart}`,
-            {
-                method: "PUT",
-                headers: {"Content-Type": "application/json"}
-            });
-
-        if (!response.ok) {
-            throw new Error("Failed to update reservation");
-        }
-
-        const updatedReservation = await response.json();
-
-        setReservation(updatedReservation);
-        setForm(updatedReservation);
-        setIsEdit(false);
-
-    } catch (error) {
         console.error(error);
     }
 }

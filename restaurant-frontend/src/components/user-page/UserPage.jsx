@@ -4,6 +4,7 @@ import NextReservation from "./NextReservation.jsx";
 import List from "../list/List.jsx";
 import ReservationListItem from "../list/ReservationListItem.jsx";
 import {useNavigate} from "react-router-dom";
+import {findClosestDate, formatDate, formatTime} from "../../util/date-time-util.jsx";
 
 function UserPage({refProp}) {
     const navigate = useNavigate();
@@ -32,7 +33,24 @@ function UserPage({refProp}) {
             <NextReservation/>
         </section>
         <section ref={refProp} className="grid-item3">
-            <ReservationScheduler></ReservationScheduler>
+            <ReservationScheduler
+                initTime={formatTime(findClosestDate())}
+                initDate={formatDate(findClosestDate())}
+                initGuests={1}
+                title="Make a reservation"
+                onSchedule={async (date, selectedTimeSlot, guests) => {
+                    const res = await fetch("http://localhost:8080/reservations",
+                        {method: "POST",
+                            credentials : "include",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify(
+                                {reservationStart: `${date}T${selectedTimeSlot}`,
+                                    numberOfGuests: guests}
+                            )
+                        });
+                    await res.json();
+                }}
+            ></ReservationScheduler>
         </section>
     </div>
 }

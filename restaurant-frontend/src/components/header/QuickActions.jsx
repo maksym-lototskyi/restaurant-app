@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../AuthContext.jsx";
 import {logout} from "../../api.js";
-import Dialog from "../Dialog.jsx";
+import Dialog from "../utils/Dialog.jsx";
 
 function QuickActions() {
     const [isScrolled, setIsScrolled] = useState(false);

@@ -1,6 +1,6 @@
-import InputField from "./InputField.jsx";
+import InputField from "./utils/InputField.jsx";
 import {useState} from "react";
-import SecondaryButton from "./SecondaryButton.jsx";
+import SecondaryButton from "./utils/SecondaryButton.jsx";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../AuthContext.jsx";
 

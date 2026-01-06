@@ -1,9 +1,9 @@
-import Field from "./Field.jsx";
-import InputField from "./InputField.jsx";
+import Field from "../utils/Field.jsx";
+import InputField from "../utils/InputField.jsx";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import SecondaryButton from "./SecondaryButton.jsx";
-import {validateUserProfile} from "../util/validationUtil.js";
+import SecondaryButton from "../utils/SecondaryButton.jsx";
+import {validateUserProfile} from "../../util/validationUtil.js";
 
 function UserProfile() {
     const [user, setUser] = useState(null);
@@ -11,6 +11,7 @@ function UserProfile() {
     const [loading, setLoading] = useState(true);
     const [isEdit, setIsEdit] = useState(false);
     const [errors, setErrors] = useState({});
+    const [error, setError] = useState("");
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -19,13 +20,25 @@ function UserProfile() {
         fetch("http://localhost:8080/profile", {
             credentials: "include"
         })
-            .then(res => res.json())
+            .then(async res => {
+                if(res.ok) return res.json();
+                if(res.status === 401) {
+                    navigate("/login");
+                    return;
+                }
+
+                const apiError = await res.json();
+                setError(apiError.message || "Something went wrong");
+                setErrors(apiError.fieldErrors || {});
+            })
             .then(data => {
+                if (!data) return;
+
                 setUser(data);
                 setForm({...data, password: ""});
                 setLoading(false);
             });
-    }, [id]);
+    }, [id, navigate]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -60,6 +73,7 @@ function UserProfile() {
             <div className="card-body start-aligned">
                 {isEdit ? (
                     <>
+                        {error && <div className="error-banner">{error}</div>}
                         <InputField label="First name" name="firstName" value={form.firstName} handleChange={handleChange} error={errors.firstName}/>
                         <InputField label="Last name" name="lastName" value={form.lastName} handleChange={handleChange} error={errors.lastName}/>
                         <InputField label="Email" name="email" value={form.email} inputType="email" handleChange={handleChange} error={errors.email}/>

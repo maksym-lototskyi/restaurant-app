@@ -1,18 +1,17 @@
 import {useEffect, useState} from "react";
-import {formatDate, findClosestDate, formatTime} from "../../util/date-time-util.jsx"
 import TimeSelector from "./TimeSelector.jsx";
 import DateSelector from "./DateSelector.jsx";
 import GuestSelector from "./GuestSelector.jsx";
 import TimeSlotsSelector from "./TimeSlotsSelector.jsx";
-import Dialog from "../Dialog.jsx";
+import Dialog from "../utils/Dialog.jsx";
 import ReservationSummary from "./ReservationSummary.jsx";
 import {useRefresh} from "./RefreshContext.jsx";
 
 
-function ReservationScheduler() {
-    const [time, setTime] = useState(formatTime(findClosestDate()));
-    const [guests, setGuests] = useState(1);
-    const [date, setDate] = useState(formatDate(findClosestDate()));
+function ReservationScheduler({onSchedule, initTime, initGuests, initDate, title}) {
+    const [time, setTime] = useState(initTime);
+    const [guests, setGuests] = useState(initGuests);
+    const [date, setDate] = useState(initDate);
     const [timeSlots, setTimeSlots] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showDialog, setShowDialog] = useState(false);
@@ -34,17 +33,7 @@ function ReservationScheduler() {
 
     const handleReservationCreate = async () => {
         setShowDialog(false);
-
-        const res = await fetch("http://localhost:8080/reservations",
-            {method: "POST",
-                credentials : "include",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(
-                    {reservationStart: `${date}T${selectedTimeSlot}`,
-                        numberOfGuests: guests}
-                )
-            });
-        await res.json();
+        onSchedule(date, selectedTimeSlot, guests);
         triggerRefresh();
     };
 
@@ -54,7 +43,7 @@ function ReservationScheduler() {
             <p>Please confirm the details below</p>
             <ReservationSummary time={selectedTimeSlot} date={date} guests={guests}></ReservationSummary>
         </Dialog>
-        <h3 className="card-header center-aligned">Make a reservation</h3>
+        <h3 className="card-header center-aligned">{title}</h3>
         <div className="grid-wrapper">
             <GuestSelector guests={guests} setGuests={setGuests}/>
             <TimeSelector time={time} setTime={setTime} date={date} type="select"/>
