@@ -1,4 +1,12 @@
 package edu.pjatk.tin.restaurant.infrastructure.web.dto;
 
-public record UpdateUserDto() {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateUserDto(
+        @NotBlank String firstName,
+        @NotBlank String lastName,
+        @NotBlank @Email String email,
+        String password
+) {
 }

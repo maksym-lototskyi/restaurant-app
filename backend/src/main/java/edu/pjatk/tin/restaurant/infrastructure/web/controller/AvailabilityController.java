@@ -40,8 +40,8 @@ public class AvailabilityController {
             LocalTime preferredStartTime,
             @RequestParam
             @Positive
-            int numberOfGuests, @RequestParam int pageNumber, @RequestParam int pageSize
+            int numberOfGuests, @RequestParam @Positive int pageSize
     ){
-        return ResponseEntity.ok(getAvailableTimeSlotsUseCase.execute(startDate, preferredStartTime, numberOfGuests, pageNumber, pageSize));
+        return ResponseEntity.ok(getAvailableTimeSlotsUseCase.execute(startDate, preferredStartTime, numberOfGuests, pageSize));
     }
 }

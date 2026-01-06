@@ -53,7 +53,7 @@ public class RestaurantTableController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TableDetails>> getTablesInHall(){
+    public ResponseEntity<List<TableDetails>> getAllTables(){
         List<TableDetails> result = getAllTablesUseCase.execute();
         return ResponseEntity.ok(result);
     }

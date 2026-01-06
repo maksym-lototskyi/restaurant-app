@@ -25,7 +25,7 @@ public class GetAvailableTimeSlotsUseCase {
         this.tableRepository = tableRepository;
     }
 
-    public List<LocalTime> execute(LocalDate date, LocalTime preferredStartTime, int numberOfGuests, int pageNumber, int pageSize){
+    public List<LocalTime> execute(LocalDate date, LocalTime preferredStartTime, int numberOfGuests, int pageSize){
         if(date.isBefore(LocalDate.now())) throw new ValidationFailedException("Start date must not be in the past");
         if(preferredStartTime.isBefore(OPENING_TIME) || preferredStartTime.isAfter(CLOSING_TIME.minusHours(SLOT_DURATION)))
             throw new ValidationFailedException("Preferred start time must be within restaurant operating hours");
@@ -33,8 +33,9 @@ public class GetAvailableTimeSlotsUseCase {
         List<LocalTime> availableTimeSlots = new ArrayList<>();
         long allTables = tableRepository.countByNumberOfGuests(numberOfGuests);
 
+        int i = 0;
         for(LocalTime time = findStartTime(date, preferredStartTime);
-            !time.isAfter(CLOSING_TIME) && !time.plusHours(SLOT_DURATION).isAfter(CLOSING_TIME);
+            !time.isAfter(CLOSING_TIME) && !time.plusHours(SLOT_DURATION).isAfter(CLOSING_TIME) && i < pageSize;
             time = time.plusMinutes(15)){
 
             LocalDateTime slotStart = LocalDateTime.of(date, time);
@@ -42,13 +43,10 @@ public class GetAvailableTimeSlotsUseCase {
 
             if(reservationRepository.countBusyTables(slotStart, slotEnd, ReservationStatus.CONFIRMED, numberOfGuests) < allTables)
                 availableTimeSlots.add(time);
+            i++;
         }
 
-        int totalSlots = availableTimeSlots.size();
-        int fromIndex = Math.min(pageNumber * pageSize, totalSlots);
-        int toIndex = Math.min(fromIndex + pageSize, totalSlots);
-
-        return availableTimeSlots.subList(fromIndex, toIndex);
+        return availableTimeSlots;
     }
 
     private static LocalTime findStartTime(LocalDate date, LocalTime preferredStartTime){

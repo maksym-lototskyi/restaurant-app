@@ -2,6 +2,7 @@ package edu.pjatk.tin.restaurant.domain.reservation;
 
 import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, ReservationId> {
     @Query("""
@@ -37,7 +37,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Reserv
         AND r.status = :status
     """)
 
-    List<Reservation> findAllByCustomerIdAndStatus(RestaurantUserId customerId, LocalDateTime now, ReservationStatus status, Sort sort);
+    Page<Reservation> findAllByCustomerIdAndStatus(RestaurantUserId customerId, LocalDateTime now, ReservationStatus status, Pageable pageable);
 
     @Query("""
     SELECT r FROM Reservation r

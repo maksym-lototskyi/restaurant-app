@@ -6,26 +6,26 @@ import edu.pjatk.tin.restaurant.domain.restaurant_user.Password;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.PasswordHasher;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateUserDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.dto.UpdateUserDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
 public class RestaurantUserController {
     private final RegisterUserUseCase registerUserUseCase;
-    private final UpdateProfileUseCase updateProfileUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetUserPageUseCase getUserPageUseCase;
     private final GetUserProfileDetailsUseCase getUserDetailsUseCase;
     private final PasswordHasher passwordHasher;
 
-    public RestaurantUserController(RegisterUserUseCase registerUserUseCase, UpdateProfileUseCase updateProfileUseCase, DeleteUserUseCase deleteUserUseCase, GetUserPageUseCase getUserPageUseCase, GetUserProfileDetailsUseCase getUserDetailsUseCase, PasswordHasher passwordHasher) {
+    public RestaurantUserController(RegisterUserUseCase registerUserUseCase, DeleteUserUseCase deleteUserUseCase, GetUserPageUseCase getUserPageUseCase, GetUserProfileDetailsUseCase getUserDetailsUseCase, PasswordHasher passwordHasher) {
         this.registerUserUseCase = registerUserUseCase;
-        this.updateProfileUseCase = updateProfileUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
         this.getUserPageUseCase = getUserPageUseCase;
         this.getUserDetailsUseCase = getUserDetailsUseCase;
@@ -40,19 +40,6 @@ public class RestaurantUserController {
                 Email.of(dto.email()),
                 Password.fromRaw(dto.password(), passwordHasher)
         );
-        return ResponseEntity.ok(userDetails);
-    }
-
-    @PutMapping("/{userId}")
-    public ResponseEntity<RestaurantUserDetails> updateUser(@PathVariable UUID userId, @Valid @RequestBody CreateUserDto dto){
-        RestaurantUserDetails userDetails = updateProfileUseCase.execute(
-                RestaurantUserId.of(userId),
-                dto.firstName(),
-                dto.lastName(),
-                Email.of(dto.email()),
-                Password.fromRaw(dto.password(), passwordHasher)
-        );
-
         return ResponseEntity.ok(userDetails);
     }
 

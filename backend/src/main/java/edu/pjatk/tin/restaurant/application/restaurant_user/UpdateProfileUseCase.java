@@ -5,6 +5,8 @@ import edu.pjatk.tin.restaurant.domain.restaurant_user.*;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.Optional;
+
 @UseCase
 public class UpdateProfileUseCase {
     private final RestaurantUserRepository userRepository;
@@ -13,7 +15,7 @@ public class UpdateProfileUseCase {
         this.userRepository = userRepository;
     }
 
-    public RestaurantUserDetails execute(RestaurantUserId userId, String firstName, String lastName, Email email, Password password) {
+    public RestaurantUserDetails execute(RestaurantUserId userId, String firstName, String lastName, Email email, Optional<Password> password) {
         RestaurantUser user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -21,7 +23,7 @@ public class UpdateProfileUseCase {
             throw new EntityExistsException("User with email " + email.value() + " already exists");
 
         user.changeEmail(email);
-        user.changePassword(password);
+        password.ifPresent(p -> user.changePassword(p));
         user.changeFirstName(firstName);
         user.changeLastName(lastName);
 

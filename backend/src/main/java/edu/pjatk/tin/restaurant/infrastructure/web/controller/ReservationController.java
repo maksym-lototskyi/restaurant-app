@@ -3,18 +3,18 @@ package edu.pjatk.tin.restaurant.infrastructure.web.controller;
 import edu.pjatk.tin.restaurant.application.reservation.*;
 import edu.pjatk.tin.restaurant.domain.reservation.ReservationId;
 import edu.pjatk.tin.restaurant.domain.reservation.TimeSlot;
-import edu.pjatk.tin.restaurant.domain.restaurant_table.RestaurantTableId;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateReservationDto;
 import edu.pjatk.tin.restaurant.infrastructure.web.security.CustomUserPrincipal;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -74,13 +74,6 @@ public class ReservationController {
         return ResponseEntity.ok(reservationDetails);
     }
 
-    @GetMapping("/customer")
-    public ResponseEntity<List<ReservationSummary>> getUserReservations(Authentication authentication) {
-        CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
-        List<ReservationSummary> reservations = getUserReservationsUseCase.execute(RestaurantUserId.of(customUserPrincipal.getId()));
-        return ResponseEntity.ok(reservations);
-    }
-
     @GetMapping("/next")
     public ResponseEntity<ReservationSummary> getNextReservation(Authentication authentication) {
         CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
@@ -90,8 +83,13 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationSummary>> getAllReservations() {
-        List<ReservationSummary> reservations = getAllReservationsUseCase.execute();
+    public ResponseEntity<Page<ReservationSummary>> getReservations(Authentication authentication, @RequestParam (defaultValue = "0") int page, @RequestParam (defaultValue = "10") int size) {
+        CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
+        if(customUserPrincipal.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            Page<ReservationSummary> reservations = getAllReservationsUseCase.execute(page, size);
+            return ResponseEntity.ok(reservations);
+        }
+        Page<ReservationSummary> reservations = getUserReservationsUseCase.execute(RestaurantUserId.of(customUserPrincipal.getId()), page, size);
         return ResponseEntity.ok(reservations);
     }
 }

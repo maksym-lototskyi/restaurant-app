@@ -5,6 +5,7 @@ import edu.pjatk.tin.restaurant.infrastructure.web.security.CustomUserPrincipal;
 import edu.pjatk.tin.restaurant.infrastructure.web.security.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,6 +52,8 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<UserInfoDto> me(Authentication authentication) {
+        if(authentication == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
         CustomUserPrincipal details = (CustomUserPrincipal) authentication.getPrincipal();
         var info = new UserInfoDto(details.getId(), details.getUsername(), details.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
         return ResponseEntity.ok(info);

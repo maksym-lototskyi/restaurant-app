@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,12 +26,6 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfig {
-    private final JwtUtil jwtUtil;
-    private final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-
-    public SecurityConfig( JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
@@ -41,7 +35,13 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a ->
-                        a.anyRequest().permitAll()
+                        a.
+                                requestMatchers("/tables/**").hasRole("ADMIN").
+                                requestMatchers("/users/**").hasRole("ADMIN").
+                                requestMatchers("/reservations/next").hasRole("USER").
+                                requestMatchers(HttpMethod.POST, "/reservations").hasRole("USER").
+                                requestMatchers("/profile", "/reservations/**", "/logout").authenticated()
+                                .anyRequest().permitAll()
 
                 )
                 .logout(logout -> logout

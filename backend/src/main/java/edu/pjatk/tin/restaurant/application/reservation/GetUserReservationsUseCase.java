@@ -4,6 +4,8 @@ import edu.pjatk.tin.restaurant.UseCase;
 import edu.pjatk.tin.restaurant.domain.reservation.ReservationRepository;
 import edu.pjatk.tin.restaurant.domain.reservation.ReservationStatus;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
@@ -17,10 +19,8 @@ public class GetUserReservationsUseCase {
         this.reservationRepository = reservationRepository;
     }
 
-    public List<ReservationSummary> execute(RestaurantUserId customerId){
-        var reservations = reservationRepository.findAllByCustomerIdAndStatus(customerId, LocalDateTime.now(), ReservationStatus.CONFIRMED, Sort.by(Sort.Order.by("timeSlot.startTime")));
-        return reservations.stream()
-                .map(ReservationMapper::toSummary)
-                .toList();
+    public Page<ReservationSummary> execute(RestaurantUserId customerId, int pageNumber, int pageSize) {
+        var reservations = reservationRepository.findAllByCustomerIdAndStatus(customerId, LocalDateTime.now(), ReservationStatus.CONFIRMED,  PageRequest.of(pageNumber, pageSize).withSort(Sort.by(Sort.Order.by("timeSlot.startTime"))));
+        return reservations.map(r -> ReservationMapper.toSummary(r));
     }
 }

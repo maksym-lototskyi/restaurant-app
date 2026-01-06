@@ -2,6 +2,8 @@ package edu.pjatk.tin.restaurant.application.reservation;
 
 import edu.pjatk.tin.restaurant.UseCase;
 import edu.pjatk.tin.restaurant.domain.reservation.ReservationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -13,10 +15,8 @@ public class GetAllReservationsUseCase {
         this.reservationRepository = reservationRepository;
     }
 
-    public List<ReservationSummary> execute(){
-        var reservations = reservationRepository.findAll();
-        return reservations.stream()
-                .map(ReservationMapper::toSummary)
-                .toList();
+    public Page<ReservationSummary> execute(int pageNumber, int pageSize) {
+        var reservations = reservationRepository.findAll(PageRequest.of(pageNumber, pageSize));
+        return reservations.map(ReservationMapper::toSummary);
     }
 }
