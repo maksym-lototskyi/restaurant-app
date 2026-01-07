@@ -29,9 +29,9 @@ public class CreateReservationUseCase {
         if(!restaurantUserRepository.existsById(customerId))
             throw new EntityNotFoundException("Customer with id " + customerId + " not found");
 
-        RestaurantTable table = restaurantTableRepository.findAvailableTable(timeSlot.startTime(), timeSlot.endTime(), numberOfGuests, PageRequest.of(0, 1))
+        RestaurantTable table = restaurantTableRepository.findAvailableTable(timeSlot.startTime(), timeSlot.endTime(), numberOfGuests, ReservationStatus.CONFIRMED, PageRequest.of(0, 1))
                 .stream()
-                .findFirst()
+                .findAny()
                 .orElseThrow(() -> new EntityNotFoundException("Available table not found for the given time slot"));
 
         Reservation reservation = Reservation.create(timeSlot, customerId, table.getId(), numberOfGuests);

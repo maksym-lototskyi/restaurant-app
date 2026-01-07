@@ -56,7 +56,12 @@ public class RestExceptionHandler {
         Map<String, String> errors = new HashMap<>();
 
         for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-            String field = violation.getPropertyPath().toString();
+            String fullPath = violation.getPropertyPath().toString();
+
+            String field = fullPath.contains(".")
+                    ? fullPath.substring(fullPath.lastIndexOf('.') + 1)
+                    : fullPath;
+
             errors.put(field, violation.getMessage());
         }
 
@@ -64,6 +69,7 @@ public class RestExceptionHandler {
                 ApiError.of(400, "Validation failed", errors)
         );
     }
+
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

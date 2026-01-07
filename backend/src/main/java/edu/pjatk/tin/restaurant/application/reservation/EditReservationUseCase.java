@@ -33,7 +33,7 @@ public class EditReservationUseCase {
                 && !principal.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
             throw new EntityNotFoundException("Reservation with id " + reservationId + " not found");
 
-        RestaurantTable table = tableRepository.findAvailableTable(newSlot.startTime(), newSlot.endTime(), numberOfGuests, PageRequest.of(0, 1))
+        RestaurantTable table = tableRepository.findAvailableTable(newSlot.startTime(), newSlot.endTime(), numberOfGuests, ReservationStatus.CONFIRMED, PageRequest.of(0, 1))
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Available table not found for the new time slot"));

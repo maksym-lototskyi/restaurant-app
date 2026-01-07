@@ -6,8 +6,8 @@ export function RefreshProvider({ children }) {
     const [version, setVersion] = useState(0);
 
     const triggerRefresh = () => {
-        setVersion(v => {
-            return v + 1
+        setVersion(prev => {
+            return prev + 1
         });
     };
 

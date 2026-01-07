@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, ReservationId> {
+
+    Page<Reservation> findAllByStatusAndTimeSlot_StartTimeAfterOrderByTimeSlot_StartTimeAsc(
+            ReservationStatus status, LocalDateTime now, Pageable pageable);
+
     @Query("""
     SELECT COUNT(r) > 0
     FROM Reservation r

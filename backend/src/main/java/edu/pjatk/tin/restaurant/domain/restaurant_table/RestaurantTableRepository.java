@@ -1,5 +1,6 @@
 package edu.pjatk.tin.restaurant.domain.restaurant_table;
 
+import edu.pjatk.tin.restaurant.domain.reservation.ReservationStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,24 +23,42 @@ public interface RestaurantTableRepository extends JpaRepository<RestaurantTable
     """)
     long countByNumberOfGuests(@Param("numberOfGuests") int numberOfGuests);
 
-    @Query("""
-    SELECT t
-    FROM RestaurantTable t
-    WHERE t.numberOfSeats >= :numberOfGuests
-      AND NOT EXISTS (
-          SELECT r
-          FROM Reservation r
-          WHERE r.tableId = t.id
-            AND r.timeSlot.startTime < :endTime
-            AND r.timeSlot.endTime > :startTime
-      )
-    ORDER BY t.numberOfSeats ASC
-""")
+    @Query(
+            value = """
+        SELECT t
+        FROM RestaurantTable t
+        WHERE t.numberOfSeats >= :numberOfGuests
+          AND NOT EXISTS (
+              SELECT 1
+              FROM Reservation r
+              WHERE r.tableId = t.id
+                AND r.status = :status
+                AND r.timeSlot.startTime < :endTime
+                AND r.timeSlot.endTime > :startTime
+          )
+        ORDER BY t.numberOfSeats ASC
+    """,
+            countQuery = """
+        SELECT COUNT(t)
+        FROM RestaurantTable t
+        WHERE t.numberOfSeats >= :numberOfGuests
+          AND NOT EXISTS (
+              SELECT 1
+              FROM Reservation r
+              WHERE r.tableId = t.id
+                AND r.status = :status
+                AND r.timeSlot.startTime < :endTime
+                AND r.timeSlot.endTime > :startTime
+          )
+    """
+    )
     List<RestaurantTable> findAvailableTable(
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime,
             @Param("numberOfGuests") int numberOfGuests,
+            ReservationStatus status,
             Pageable pageable
     );
+
 
 }

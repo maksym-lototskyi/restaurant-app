@@ -5,6 +5,7 @@ import edu.pjatk.tin.restaurant.application.restaurant_user.RestaurantUserProfil
 import edu.pjatk.tin.restaurant.domain.restaurant_user.Email;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.Password;
 import edu.pjatk.tin.restaurant.domain.restaurant_user.PasswordHasher;
+import edu.pjatk.tin.restaurant.infrastructure.web.constraint_validation.ValidPassword;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateUserDto;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.UserInfoDto;
 import edu.pjatk.tin.restaurant.infrastructure.web.security.CustomUserPrincipal;
@@ -19,9 +20,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 public class AuthController {
     private final RegisterUserUseCase registerUserUseCase;
     private final PasswordHasher passwordHasher;
@@ -37,11 +40,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(
-            @RequestParam String username,
-            @RequestParam String password,
+            @RequestParam @jakarta.validation.constraints.Email String email,
+            @RequestParam @ValidPassword String password,
             HttpServletResponse response
     ) {
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         String token = jwtUtil.generateToken((UserDetails) auth.getPrincipal());
 
