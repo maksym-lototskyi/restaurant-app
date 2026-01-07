@@ -19,15 +19,9 @@ export default function CreateTable() {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        setForm({
-            ...form,
-            [name]: value
-        });
+        setForm({...form, [name]: value});
 
-        setErrors({
-            ...errors,
-            [name]: null
-        });
+        setErrors({...errors, [name]: null});
     };
 
     const handleSubmit = async () => {
@@ -108,12 +102,8 @@ export default function CreateTable() {
             </div>
 
             <div className="card-footer">
-                <SecondaryButton onClick={handleSubmit}>
-                    Confirm
-                </SecondaryButton>
-                <SecondaryButton type="cancel" onClick={() => navigate(-1)}>
-                    Cancel
-                </SecondaryButton>
+                <SecondaryButton onClick={handleSubmit}>Confirm</SecondaryButton>
+                <SecondaryButton type="cancel" onClick={() => navigate(-1)}>Cancel</SecondaryButton>
             </div>
         </div>
     );

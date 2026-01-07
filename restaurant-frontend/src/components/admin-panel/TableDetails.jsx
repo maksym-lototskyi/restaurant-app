@@ -141,7 +141,10 @@ export default function TableDetails() {
                         <InputField
                             type="text"
                             value={form.tableNumber}
-                            handleChange={(e) => setForm({ ...form, tableNumber: e.target.value })}
+                            handleChange={(e) => {
+                                setForm({ ...form, tableNumber: e.target.value });
+                                setErrors({...errors, [e.target.name]: null});
+                            }}
                             name="tableNumber"
                             label="Table Number:"
                             error={errors?.tableNumber}
@@ -150,7 +153,10 @@ export default function TableDetails() {
                         <InputField
                             type="number"
                             value={form.floorNumber}
-                            handleChange={(e) => setForm({ ...form, floorNumber: Number(e.target.value) })}
+                            handleChange={(e) => {
+                                setForm({ ...form, floorNumber: Number(e.target.value)});
+                                setErrors({...errors, [e.target.name]: null});
+                            }}
                             name="floorNumber"
                             label="Floor Number:"
                             error={errors?.floorNumber}

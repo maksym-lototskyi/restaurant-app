@@ -42,6 +42,7 @@ function UserProfile() {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+        setErrors({...errors, [e.target.name]: null});
     };
 
     const handleEditConfirm = async () => {
@@ -97,7 +98,13 @@ function UserProfile() {
                 ) : (
                     <>
                         <SecondaryButton onClick={() => navigate("/")}>Back</SecondaryButton>
-                        <SecondaryButton onClick={() => setIsEdit(true)}>Edit profile</SecondaryButton>
+                        <SecondaryButton onClick={() => {
+                            setForm({...user});
+                            setErrors({});
+                            setError(null);
+                            setIsEdit(true)
+                        }
+                        }>Edit profile</SecondaryButton>
                     </>
                 )}
             </div>

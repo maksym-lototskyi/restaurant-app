@@ -101,7 +101,7 @@ function ReservationDetails() {
         navigate("/");
     }
 
-    const handleReschedule = () => {
+    const handleEditMode = () => {
         setIsEdit(true);
     }
 
@@ -181,7 +181,7 @@ function ReservationDetails() {
                     (<>
                         <button className="secondary-button" onClick={() => navigate(-1)}>Back
                         </button>
-                        <button className="secondary-button" onClick={handleReschedule}>Edit
+                        <button className="secondary-button" onClick={handleEditMode}>Edit
                         </button>
                         <button className="secondary-button cancel-button"
                                 onClick={handleShowDialog}>Cancel

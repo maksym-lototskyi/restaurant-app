@@ -151,12 +151,8 @@ export default function UserDetails() {
             </div>
 
             <div className="card-footer">
-                <SecondaryButton onClick={() => navigate(-1)}>
-                    Back
-                </SecondaryButton>
-                <SecondaryButton cancel onClick={() => setShowDialog(true)}>
-                    Delete
-                </SecondaryButton>
+                <SecondaryButton onClick={() => navigate(-1)}>Back</SecondaryButton>
+                <SecondaryButton cancel onClick={() => setShowDialog(true)}>Delete</SecondaryButton>
             </div>
         </section>
     );

@@ -54,8 +54,18 @@ export default function Login(){
         <h2 className="card-header">Login</h2>
         <div className="card-body">
             {error && <div className="error-banner">{error}</div>}
-            <InputField inputType="text" label="Email" value={email} handleChange={(e) => setEmail(e.target.value)} error={errors?.email}></InputField>
-            <InputField inputType="password" label="Password" value={password} handleChange={(e) => setPassword(e.target.value)} error={errors?.password}></InputField>
+            <InputField inputType="text" label="Email" name="email" value={email}
+                        handleChange={(e) => {
+                            setEmail(e.target.value)
+                            setErrors({...errors, [e.target.name]: null});
+                        }}
+                        error={errors?.email}></InputField>
+            <InputField inputType="password" label="Password" name="password" value={password}
+                        handleChange={(e) => {
+                            setPassword(e.target.value);
+                            setErrors({...errors, [e.target.name]: null});
+                        }}
+                        error={errors?.password}></InputField>
         </div>
         <div className="card-footer">
             <SecondaryButton onClick={handleSubmit}>Submit</SecondaryButton>
