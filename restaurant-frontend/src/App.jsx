@@ -11,6 +11,9 @@ import UserProfile from "./components/profile/UserProfile.jsx";
 import {RefreshProvider} from "./components/user-page/RefreshContext.jsx";
 import AdminPanel from "./components/admin-panel/AdminPanel.jsx";
 import TableDetails from "./components/TableDetails.jsx";
+import UserDetails from "./components/UserDetails.jsx";
+import Register from "./components/Register.jsx";
+import CreateTable from "./components/CreateTable.jsx";
 
 function App() {
     const targetRef = useRef(null);
@@ -33,10 +36,21 @@ function App() {
                                     {isAuthenticated ? <UserPage refProp={targetRef}/> : null}
                                 </> : <AdminPanel/>
                         }/>
-                        <Route path="/profile" element={<UserProfile/>}/>
-                        <Route path="/reservations/:id" element={<ReservationDetails/>}/>
-                        <Route path="/tables/:id" element={<TableDetails/>}/>
-                        <Route path="/login" element={<Login/>}/>
+                        {isAuthenticated ? <>
+                                <Route path="/profile" element={<UserProfile/>}/>
+                                <Route path="/reservations/:id" element={<ReservationDetails/>}/>
+                            </> :
+                            <>
+                                <Route path="/register" element={<Register/>}/>
+                                <Route path="/login" element={<Login/>}/>
+                            </>
+                        }
+                        {user?.roles.includes("ROLE_ADMIN") ?
+                            <>
+                                <Route path="/tables/:id" element={<TableDetails/>}/>
+                                <Route path="/users/:id" element={<UserDetails/>}/>
+                                <Route path="/tables/new" element={<CreateTable/>}/>
+                            </> : null}
                     </Routes>
                 </RefreshProvider>
             </> : null

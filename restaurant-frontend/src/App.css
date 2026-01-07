@@ -6,6 +6,8 @@
 
 body{
     background: #ece2db;
+    min-height: 100vh;
+    min-width: 100vw;
 }
 
 h2, h3{
@@ -31,9 +33,10 @@ header{
 .card-container{
     display: grid;
     padding: 2rem 1.5rem 2rem 1.5rem;
-    border: solid 1px darkgray;
+    border: none;
+    box-shadow: 0 0 1em 0 #afafaf;
     background: whitesmoke;
-    border-radius: 5px;
+    border-radius: 20px;
     grid-template-rows: 10% 80% 10%;
 }
 
@@ -75,6 +78,7 @@ header{
     margin: 10vh;
     width: 40%;
     justify-self: center;
+    align-self: center;
 }
 
 .card-body.start-aligned{

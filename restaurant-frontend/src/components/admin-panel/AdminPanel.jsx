@@ -28,20 +28,23 @@ export default function AdminPanel() {
                 />
             )}
         />,
-        tables : <List
-            fetchItems={({ page, size }) =>
-                fetch(`http://localhost:8080/tables?page=${page}&size=${size}`, {
-                    credentials: "include"
-                }).then(r => r.json())
-            }
-            renderItem={item => (
-                <TableListItem
-                    key={item.id}
-                    table={item}
-                    onClick={() => navigate(`/tables/${item.id}`)}
-                />
-            )}
-        />,
+        tables : <div>
+            <button className="secondary-button confirm-button" style={{marginTop : "1rem"}} onClick={() => navigate("/tables/new")}>Create Table</button>
+            <List
+                fetchItems={({ page, size }) =>
+                    fetch(`http://localhost:8080/tables?page=${page}&size=${size}`, {
+                        credentials: "include"
+                    }).then(r => r.json())
+                }
+                renderItem={item => (
+                    <TableListItem
+                        key={item.id}
+                        table={item}
+                        onClick={() => navigate(`/tables/${item.id}`)}
+                    />
+                )}
+            />
+        </div>,
         users : <List
             fetchItems={({ page, size }) =>
                 fetch(`http://localhost:8080/users?page=${page}&size=${size}`, {

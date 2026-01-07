@@ -6,7 +6,9 @@ export function RefreshProvider({ children }) {
     const [version, setVersion] = useState(0);
 
     const triggerRefresh = () => {
-        setVersion(v => v + 1);
+        setVersion(v => {
+            return v + 1
+        });
     };
 
     return (
@@ -16,7 +18,6 @@ export function RefreshProvider({ children }) {
     );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useRefresh(){
     return useContext(RefreshContext);
 }

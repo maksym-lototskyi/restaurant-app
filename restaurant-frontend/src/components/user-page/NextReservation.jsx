@@ -4,7 +4,6 @@ import {useEffect, useState} from "react";
 import {useRefresh} from "./RefreshContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../AuthContext.jsx";
-import NotFound from "../error/NotFound.jsx";
 import InternalError from "../error/InternalError.jsx";
 import ForbiddenError from "../error/Forbidden.jsx";
 
@@ -61,7 +60,7 @@ export default function NextReservation() {
 
     return (
         <>
-            <h3 className="card-header center-aligned">Your next reservation</h3>
+            <h3 className="card-header center-aligned">My next reservation</h3>
             <div className="card-body center-aligned">
                 {status === 'not found' ? (
                     <p>No upcoming reservations</p>

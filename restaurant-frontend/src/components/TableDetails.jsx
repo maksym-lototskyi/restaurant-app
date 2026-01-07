@@ -7,6 +7,7 @@ import InternalError from "./error/InternalError.jsx";
 import ForbiddenError from "./error/Forbidden.jsx";
 import SecondaryButton from "./utils/SecondaryButton.jsx";
 import InputField from "./utils/InputField.jsx";
+import {validateTableUpdate} from "../validation/validateTable.js";
 
 export default function TableDetails() {
     const [table, setTable] = useState(null);
@@ -50,6 +51,11 @@ export default function TableDetails() {
 
 
     const handleEditConfirm = async () => {
+        const validationErrors = validateTableUpdate(form);
+        if(Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
         try {
             const res = await fetch(`http://localhost:8080/tables/${id}`, {
                 method: "PUT",
@@ -66,6 +72,9 @@ export default function TableDetails() {
                 setError(apiError.message);
                 if(res.status === 400){
                     return setErrors(apiError.fieldErrors || {});
+                }
+                if (res.status === 409){
+                    return;
                 }
                 return setStatus(res.status === 404 ? "not found" : "internal error");
             }
@@ -87,6 +96,7 @@ export default function TableDetails() {
             });
 
             if (res.status === 401) return navigate("/login");
+
             if (!res.ok) {
                 const apiError = await res.json();
                 setError(apiError.message);
@@ -102,6 +112,8 @@ export default function TableDetails() {
     const handleCancelEdit = () => {
         setIsEdit(false);
         setForm({...table});
+        setError(null);
+        setErrors({});
     }
     const handleShowDialog = () => setShowDialog(true);
 
@@ -163,7 +175,7 @@ export default function TableDetails() {
                     <>
                         <SecondaryButton onClick={() => navigate(-1)}>Back</SecondaryButton>
                         <SecondaryButton onClick={() => setIsEdit(true)}>Edit</SecondaryButton>
-                        <SecondaryButton cancel onClick={handleShowDialog}>Delete</SecondaryButton>
+                        <SecondaryButton type="cancel" cancel onClick={handleShowDialog}>Delete</SecondaryButton>
                     </>
                 )}
             </div>

@@ -5,7 +5,7 @@ export default function GuestSelector({guests, setGuests}) {
         <FiUser size={35}/>
         <select className="selector" value={guests}
                 onChange={(e) => setGuests(e.target.value)}>
-            {Array.from({length: 15}, (_, i) => (<option key={i} value={i + 1}>
+            {Array.from({length: 20}, (_, i) => (<option key={i} value={i + 1}>
                 {i + 1} {i === 0 ? 'person' : 'people'}
             </option>))}
         </select>

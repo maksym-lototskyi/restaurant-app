@@ -3,7 +3,7 @@ import InputField from "../utils/InputField.jsx";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SecondaryButton from "../utils/SecondaryButton.jsx";
-import {validateUserProfile} from "../../util/validationUtil.js";
+import {validateUser} from "../../validation/validateUser.js";
 
 function UserProfile() {
     const [user, setUser] = useState(null);
@@ -45,7 +45,7 @@ function UserProfile() {
     };
 
     const handleEditConfirm = async () => {
-        const {isValid, errors} = validateUserProfile(form);
+        const {isValid, errors} = validateUser(form);
         if (!isValid) {
             setErrors(errors);
             return;

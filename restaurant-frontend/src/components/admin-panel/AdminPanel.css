@@ -1,9 +1,10 @@
 .admin-panel{
     display: grid;
     padding: 2rem 1.5rem 2rem 1.5rem;
-    border: solid 1px darkgray;
+    border: none;
+    box-shadow: 0 0 1em 0 #afafaf;
     background: whitesmoke;
-    border-radius: 5px;
+    border-radius: 20px;
     grid-template-rows: 10% 80% 10%;
     width: 80%;
     min-height: 80vh;

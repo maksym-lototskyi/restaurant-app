@@ -32,7 +32,7 @@ function QuickActions() {
     return (<nav className={`quick-actions ${isScrolled ? 'scrolled' : ''}`}>
         {!user ? <>
                 <button className="secondary-button quick-actions-button" onClick={() => navigate("/login")}>Login</button>
-                <button className="secondary-button quick-actions-button">Register</button>
+                <button className="secondary-button quick-actions-button" onClick={() => navigate("/register")}>Register</button>
             </> :
             <>
                 <Dialog isOpen={showDialog} onClose={() => setShowDialog(false)} onConfirm={handleLogout}
