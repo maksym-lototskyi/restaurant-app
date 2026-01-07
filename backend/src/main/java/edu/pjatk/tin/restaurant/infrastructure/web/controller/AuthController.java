@@ -23,6 +23,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @Validated
 public class AuthController {
@@ -46,7 +48,7 @@ public class AuthController {
     ) {
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
-        String token = jwtUtil.generateToken((UserDetails) auth.getPrincipal());
+        String token = jwtUtil.generateToken((CustomUserPrincipal) Objects.requireNonNull(auth.getPrincipal()));
 
         Cookie jwtCookie = new Cookie("JWT_TOKEN", token);
         jwtCookie.setHttpOnly(true);

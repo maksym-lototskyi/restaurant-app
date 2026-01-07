@@ -179,7 +179,7 @@ export default function TableDetails() {
                     </>
                 ) : (
                     <>
-                        <SecondaryButton onClick={() => navigate(-1)}>Back</SecondaryButton>
+                        <SecondaryButton onClick={() => navigate("/")}>Back</SecondaryButton>
                         <SecondaryButton onClick={() => setIsEdit(true)}>Edit</SecondaryButton>
                         <SecondaryButton type="cancel" cancel onClick={handleShowDialog}>Delete</SecondaryButton>
                     </>

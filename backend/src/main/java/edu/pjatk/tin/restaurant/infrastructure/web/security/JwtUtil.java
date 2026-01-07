@@ -2,43 +2,46 @@ package edu.pjatk.tin.restaurant.infrastructure.web.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
     private final JwtProperties jwtProperties;
+    private final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     public JwtUtil(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(CustomUserPrincipal userDetails){
         Key key = Keys.hmacShaKeyFor(jwtProperties.getSecretKey().getBytes());
 
         return Jwts.builder()
                 .claim("roles", userDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList())
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDetails.getId().toString())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationTime()))
                 .setIssuedAt(new Date())
                 .signWith(key)
                 .compact();
     }
 
-    public String getUsername(String token) {
+    public UUID getId(String token) {
         Key key = Keys.hmacShaKeyFor(jwtProperties.getSecretKey().getBytes());
-        return Jwts.parserBuilder()
+        return UUID.fromString(Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .getSubject();
+                .getSubject());
     }
 
     private void validateToken(String token) {
@@ -48,10 +51,10 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
-            System.out.println("Token expired");
+            logger.error("Token expired at: {}", e.getClaims().getExpiration());
             throw e;
         } catch (JwtException e) {
-            System.out.println("Invalid token");
+            logger.error("Invalid JWT token: {}", e.getMessage());
             throw e;
         }
     }

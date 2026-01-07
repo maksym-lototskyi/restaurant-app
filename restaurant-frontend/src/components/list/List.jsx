@@ -26,7 +26,7 @@ function List({renderItem, fetchItems, pageSize = 8}) {
     return (
         <>
             <div className="body">
-                {items.length === 0 ? (
+                {items && items.length === 0 ? (
                     <p>No reservations found</p>
                 ) : (
                     <ul className="list">
