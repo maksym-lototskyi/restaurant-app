@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +29,12 @@ public class RestExceptionHandler {
     public ResponseEntity<ApiError> handleEntityNotFoundException(EntityNotFoundException e) {
         logger.warn("Entity not found: {}", e.getMessage());
         return buildResponse(e, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentialsException(BadCredentialsException e) {
+        logger.warn("Bad credentials: {}", e.getMessage());
+        return buildResponse(e, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({EntityExistsException.class, ReservationCollisionException.class})

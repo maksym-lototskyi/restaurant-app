@@ -1,10 +1,17 @@
 package edu.pjatk.tin.restaurant.infrastructure.web.controller;
 
+import edu.pjatk.tin.restaurant.application.restaurant_user.RegisterUserUseCase;
+import edu.pjatk.tin.restaurant.application.restaurant_user.RestaurantUserProfileDetails;
+import edu.pjatk.tin.restaurant.domain.restaurant_user.Email;
+import edu.pjatk.tin.restaurant.domain.restaurant_user.Password;
+import edu.pjatk.tin.restaurant.domain.restaurant_user.PasswordHasher;
+import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateUserDto;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.UserInfoDto;
 import edu.pjatk.tin.restaurant.infrastructure.web.security.CustomUserPrincipal;
 import edu.pjatk.tin.restaurant.infrastructure.web.security.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,18 +19,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
-
+    private final RegisterUserUseCase registerUserUseCase;
+    private final PasswordHasher passwordHasher;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public AuthController(RegisterUserUseCase registerUserUseCase, PasswordHasher passwordHasher, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+        this.registerUserUseCase = registerUserUseCase;
+        this.passwordHasher = passwordHasher;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
@@ -34,9 +41,7 @@ public class AuthController {
             @RequestParam String password,
             HttpServletResponse response
     ) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         String token = jwtUtil.generateToken((UserDetails) auth.getPrincipal());
 
@@ -48,6 +53,17 @@ public class AuthController {
         response.addCookie(jwtCookie);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RestaurantUserProfileDetails> createUser(@Valid @RequestBody CreateUserDto dto) {
+        RestaurantUserProfileDetails userDetails = registerUserUseCase.execute(
+                dto.firstName(),
+                dto.lastName(),
+                Email.of(dto.email()),
+                Password.fromRaw(dto.password(), passwordHasher)
+        );
+        return ResponseEntity.ok(userDetails);
     }
 
     @GetMapping("/me")

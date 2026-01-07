@@ -1,4 +1,4 @@
-export function validateUserProfile(form) {
+export function validateUser(form) {
     const errors = {};
 
     if (!form.firstName || !form.firstName.trim()) {

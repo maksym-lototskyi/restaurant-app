@@ -6,16 +6,16 @@ import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @UseCase
-public class GetUserProfileDetailsUseCase {
+public class GetUserAdminDetailsUseCase {
     private final RestaurantUserRepository userRepository;
 
-    public GetUserProfileDetailsUseCase(RestaurantUserRepository userRepository) {
+    public GetUserAdminDetailsUseCase(RestaurantUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public RestaurantUserProfileDetails execute(RestaurantUserId userId) {
+    public RestaurantUserAdminDetails execute(RestaurantUserId userId) {
         return userRepository.findById(userId)
-                .map(UserMapper::toDetails)
+                .map(UserMapper::toAdminDetails)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
     }
 }

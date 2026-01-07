@@ -1,14 +1,14 @@
 package edu.pjatk.tin.restaurant.infrastructure.web.controller;
 
 import edu.pjatk.tin.restaurant.application.restaurant_user.*;
-import edu.pjatk.tin.restaurant.domain.restaurant_user.Email;
-import edu.pjatk.tin.restaurant.domain.restaurant_user.Password;
-import edu.pjatk.tin.restaurant.domain.restaurant_user.PasswordHasher;
-import edu.pjatk.tin.restaurant.domain.restaurant_user.RestaurantUserId;
+import edu.pjatk.tin.restaurant.domain.restaurant_user.*;
 import edu.pjatk.tin.restaurant.infrastructure.web.dto.CreateUserDto;
+import edu.pjatk.tin.restaurant.infrastructure.web.exception.ApiError;
+import edu.pjatk.tin.restaurant.infrastructure.web.security.CustomUserPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,29 +16,36 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 public class RestaurantUserController {
-    private final RegisterUserUseCase registerUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetUserPageUseCase getUserPageUseCase;
-    private final GetUserProfileDetailsUseCase getUserDetailsUseCase;
-    private final PasswordHasher passwordHasher;
+    private final GetUserAdminDetailsUseCase getUserAdminDetailsUseCase;
+    private final ChangeUserPermissionUseCase changeUserPermissionUseCase;
 
-    public RestaurantUserController(RegisterUserUseCase registerUserUseCase, DeleteUserUseCase deleteUserUseCase, GetUserPageUseCase getUserPageUseCase, GetUserProfileDetailsUseCase getUserDetailsUseCase, PasswordHasher passwordHasher) {
-        this.registerUserUseCase = registerUserUseCase;
+    public RestaurantUserController(DeleteUserUseCase deleteUserUseCase, GetUserPageUseCase getUserPageUseCase, GetUserAdminDetailsUseCase getUserAdminDetailsUseCase, ChangeUserPermissionUseCase changeUserPermissionUseCase) {
         this.deleteUserUseCase = deleteUserUseCase;
         this.getUserPageUseCase = getUserPageUseCase;
-        this.getUserDetailsUseCase = getUserDetailsUseCase;
-        this.passwordHasher = passwordHasher;
+        this.getUserAdminDetailsUseCase = getUserAdminDetailsUseCase;
+        this.changeUserPermissionUseCase = changeUserPermissionUseCase;
     }
 
-    @PostMapping
-    public ResponseEntity<RestaurantUserProfileDetails> createUser(@Valid @RequestBody CreateUserDto dto) {
-        RestaurantUserProfileDetails userDetails = registerUserUseCase.execute(
-                dto.firstName(),
-                dto.lastName(),
-                Email.of(dto.email()),
-                Password.fromRaw(dto.password(), passwordHasher)
+
+    @PutMapping("/{userId}/permissions")
+    public ResponseEntity<RestaurantUserAdminDetails> changeUserPermission(@PathVariable UUID userId,
+                                                                           @RequestParam String role,
+                                                                           Authentication authentication){
+        CustomUserPrincipal principal = (CustomUserPrincipal) authentication.getPrincipal();
+        try {
+            Role.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        changeUserPermissionUseCase.execute(
+                RestaurantUserId.of(userId),
+                Role.valueOf(role),
+                principal
         );
-        return ResponseEntity.ok(userDetails);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{userId}")
@@ -48,15 +55,15 @@ public class RestaurantUserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<RestaurantUserProfileDetails> getUserDetails(@PathVariable UUID userId){
-        RestaurantUserProfileDetails userDetails = getUserDetailsUseCase.execute(RestaurantUserId.of(userId));
+    public ResponseEntity<RestaurantUserAdminDetails> getUserDetails(@PathVariable UUID userId){
+        RestaurantUserAdminDetails userDetails = getUserAdminDetailsUseCase.execute(RestaurantUserId.of(userId));
         return ResponseEntity.ok(userDetails);
     }
 
     @GetMapping
-    public ResponseEntity<Page<RestaurantUserAdminDetails>> getAllUsers(@RequestParam(required = false, defaultValue = "0") int page,
+    public ResponseEntity<Page<RestaurantUserProfileDetails>> getAllUsers(@RequestParam(required = false, defaultValue = "0") int page,
                                                                               @RequestParam(required = false, defaultValue = "10") int size){
-        Page<RestaurantUserAdminDetails> users = getUserPageUseCase.execute(page, size);
+        Page<RestaurantUserProfileDetails> users = getUserPageUseCase.execute(page, size);
         return ResponseEntity.ok(users);
     }
 }

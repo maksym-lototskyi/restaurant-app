@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS reservation(
     status VARCHAR(50) NOT NULL,
     number_of_guests INTEGER NOT NULL,
     CONSTRAINT user_reservation_fk
-        FOREIGN KEY (customer_id) REFERENCES restaurant_user(id),
+        FOREIGN KEY (customer_id) REFERENCES restaurant_user(id) ON DELETE CASCADE,
     CONSTRAINT table_reservation_fk
-        FOREIGN KEY (table_id) REFERENCES restaurant_table(id)
+        FOREIGN KEY (table_id) REFERENCES restaurant_table(id) ON DELETE CASCADE
 )ENGINE=InnoDB;

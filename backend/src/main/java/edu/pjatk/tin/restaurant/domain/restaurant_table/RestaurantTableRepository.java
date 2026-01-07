@@ -11,6 +11,12 @@ import java.util.List;
 public interface RestaurantTableRepository extends JpaRepository<RestaurantTable, RestaurantTableId> {
     boolean existsByTableNumber(String tableNumber);
     @Query("""
+        SELECT COUNT (rt) > 0 FROM RestaurantTable rt
+        WHERE rt.tableNumber = :tableNumber
+        AND rt.id <> :id
+    """)
+    boolean existsByTableNumberExceptSelf(String tableNumber, RestaurantTableId id);
+    @Query("""
         SELECT COUNT(rt) FROM RestaurantTable rt
         WHERE rt.numberOfSeats >= :numberOfGuests
     """)

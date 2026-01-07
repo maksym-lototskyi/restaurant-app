@@ -1,17 +1,16 @@
 package edu.pjatk.tin.restaurant.infrastructure.web.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record CreateTableDto(
         @NotBlank
         @Size(max = 10)
         String tableNumber,
         @PositiveOrZero
+        @Max(100)
         int floorNumber,
         @Positive
+        @Max(20)
         int numberOfSeats
 ) {
 }

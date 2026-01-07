@@ -61,6 +61,10 @@ public class RestaurantUser {
         this.password = ValidationUtil.requireNonNull(password, "Password cannot be null");
     }
 
+    public void changeRole(Role role) {
+        this.role = ValidationUtil.requireNonNull(role, "Role cannot be null");
+    }
+
     public RestaurantUserId getId() {
         return id;
     }

@@ -17,7 +17,7 @@ public class UpdateTableInfoUseCase {
         var table = restaurantTableRepository.findById(tableId)
                 .orElseThrow(() -> new IllegalArgumentException("Table with id " + tableId + " not found"));
 
-        if(restaurantTableRepository.existsByTableNumber(newTableNumber))
+        if(restaurantTableRepository.existsByTableNumberExceptSelf(newTableNumber, tableId))
             throw new EntityExistsException("Table with number " + newTableNumber + " already exists");
 
         table.changeNumber(newTableNumber);
