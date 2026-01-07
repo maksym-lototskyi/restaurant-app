@@ -1,5 +1,5 @@
 import './TopBanner.css'
-import {useAuth} from "../../AuthContext.jsx";
+import {useAuth} from "../auth/AuthContext.jsx";
 
 function TopBanner({scrollToTarget}) {
     const {isAuthenticated} = useAuth();

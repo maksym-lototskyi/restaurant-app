@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from "./utils/InputField.jsx";
-import SecondaryButton from "./utils/SecondaryButton.jsx";
-import {validateTableCreate} from "../validation/validateTable.js";
+import InputField from "../utils/InputField.jsx";
+import SecondaryButton from "../utils/SecondaryButton.jsx";
+import {validateTableCreate} from "../../validation/validateTable.js";
 
 export default function CreateTable() {
     const [form, setForm] = useState({

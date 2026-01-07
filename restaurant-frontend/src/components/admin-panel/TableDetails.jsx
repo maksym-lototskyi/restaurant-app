@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Field from "./utils/Field.jsx";
-import Dialog from "./utils/Dialog.jsx";
-import NotFound from "./error/NotFound.jsx";
-import InternalError from "./error/InternalError.jsx";
-import ForbiddenError from "./error/Forbidden.jsx";
-import SecondaryButton from "./utils/SecondaryButton.jsx";
-import InputField from "./utils/InputField.jsx";
-import {validateTableUpdate} from "../validation/validateTable.js";
+import Field from "../utils/Field.jsx";
+import Dialog from "../utils/Dialog.jsx";
+import NotFound from "../error/NotFound.jsx";
+import InternalError from "../error/InternalError.jsx";
+import ForbiddenError from "../error/Forbidden.jsx";
+import SecondaryButton from "../utils/SecondaryButton.jsx";
+import InputField from "../utils/InputField.jsx";
+import {validateTableUpdate} from "../../validation/validateTable.js";
 
 export default function TableDetails() {
     const [table, setTable] = useState(null);

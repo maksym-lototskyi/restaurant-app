@@ -33,7 +33,7 @@ function ReservationScheduler({onSchedule, initTime, initGuests, initDate, title
 
     const handleReservationCreate = async () => {
         setShowDialog(false);
-        onSchedule(date, selectedTimeSlot, guests);
+        await onSchedule(date, selectedTimeSlot, guests);
         triggerRefresh();
     };
 

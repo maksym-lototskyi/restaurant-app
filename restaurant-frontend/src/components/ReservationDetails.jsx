@@ -2,12 +2,12 @@ import Field from "./utils/Field.jsx";
 import {useEffect, useState} from "react";
 import Dialog from "./utils/Dialog.jsx";
 import {useNavigate, useParams} from "react-router-dom";
-import {cancelReservation} from "../api.js";
 import NotFound from "./error/NotFound.jsx";
 import InternalError from "./error/InternalError.jsx";
 import ReservationScheduler from "./user-page/ReservationScheduler.jsx";
 import {formatDate, formatTime} from "../util/date-time-util.jsx";
 import ForbiddenError from "./error/Forbidden.jsx";
+import {validateReservationEdit} from "../validation/validateReservations.js";
 
 function ReservationDetails() {
     const [reservation, setReservation] = useState(null);
@@ -47,6 +47,12 @@ function ReservationDetails() {
 
 
     const handleEditConfirm = async (date, selectedTimeSlot, guests) => {
+        const validationResult = validateReservationEdit(date, selectedTimeSlot, guests);
+        if(!validationResult.valid){
+            setError(validationResult.error);
+            return;
+        }
+
         try {
             const response = await fetch(
                 `http://localhost:8080/reservations/${id}/reschedule`,
@@ -83,7 +89,15 @@ function ReservationDetails() {
     };
 
     const handleReservationCancelConfirm = async () => {
-        await cancelReservation(reservation.id);
+            try{
+                await fetch(`http://localhost:8080/reservations/${reservation.id}/cancel`,
+                    {
+                        credentials : "include",
+                        method: "PUT"
+                    });
+            }catch (error) {
+                console.error(error);
+            }
         navigate("/");
     }
 

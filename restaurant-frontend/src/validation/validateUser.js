@@ -29,6 +29,18 @@ export function validateUser(form) {
     };
 }
 
+export function validateLogin(email, password) {
+    const errors = {};
+    if(!isValidEmail(email)){
+        errors.email = "Invalid email format";
+    }
+    validatePassword(password, errors)
+    return {
+        isValid: Object.keys(errors).length === 0,
+        errors
+    };
+}
+
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }

@@ -3,7 +3,7 @@ import SecondaryButton from "../utils/SecondaryButton.jsx";
 import {useEffect, useState} from "react";
 import {useRefresh} from "./RefreshContext.jsx";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../AuthContext.jsx";
+import {useAuth} from "../auth/AuthContext.jsx";
 import InternalError from "../error/InternalError.jsx";
 import ForbiddenError from "../error/Forbidden.jsx";
 

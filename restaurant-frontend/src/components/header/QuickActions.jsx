@@ -2,8 +2,7 @@ import './QuickActions.css'
 import {FiUser} from "react-icons/fi";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../AuthContext.jsx";
-import {logout} from "../../api.js";
+import {useAuth} from "../auth/AuthContext.jsx";
 import Dialog from "../utils/Dialog.jsx";
 
 function QuickActions() {
@@ -24,7 +23,14 @@ function QuickActions() {
     }, []);
 
     const handleLogout = async () => {
-        await logout();
+        try {
+            await fetch("http://localhost:8080/logout", {
+                method: "POST",
+                credentials: "include"
+            })
+        } catch (err) {
+            console.log(err);
+        }
         await refreshUser();
         navigate('/');
     }
@@ -32,15 +38,18 @@ function QuickActions() {
     return (<nav className={`quick-actions ${isScrolled ? 'scrolled' : ''}`}>
         {!user ? <>
                 <button className="secondary-button quick-actions-button" onClick={() => navigate("/login")}>Login</button>
-                <button className="secondary-button quick-actions-button" onClick={() => navigate("/register")}>Register</button>
+                <button className="secondary-button quick-actions-button" onClick={() => navigate("/register")}>Register
+                </button>
             </> :
             <>
                 <Dialog isOpen={showDialog} onClose={() => setShowDialog(false)} onConfirm={handleLogout}
                         title="Confirmation">
                     <p>Are you sure you want to logout?</p>
                 </Dialog>
-                <button className="secondary-button quick-actions-button" onClick={() => setShowDialog(true)}>Logout</button>
-                <button className="secondary-button quick-actions-button"><FiUser size={24} onClick={() => navigate("/profile")}/>
+                <button className="secondary-button quick-actions-button" onClick={() => setShowDialog(true)}>Logout
+                </button>
+                <button className="secondary-button quick-actions-button"><FiUser size={24}
+                                                                                  onClick={() => navigate("/profile")}/>
                 </button>
             </>
         }

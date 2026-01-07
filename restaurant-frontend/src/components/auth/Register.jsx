@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from "./utils/InputField.jsx";
-import SecondaryButton from "./utils/SecondaryButton.jsx";
-import {validateUser} from "../validation/validateUser.js";
+import InputField from "../utils/InputField.jsx";
+import SecondaryButton from "../utils/SecondaryButton.jsx";
+import {validateUser} from "../../validation/validateUser.js";
 
 export default function Register() {
     const [form, setForm] = useState({
@@ -103,12 +103,8 @@ export default function Register() {
             </div>
 
             <div className="card-footer">
-                <SecondaryButton onClick={handleSubmit}>
-                    Register
-                </SecondaryButton>
-                <SecondaryButton type="cancel" onClick={() => navigate("/")}>
-                    Cancel
-                </SecondaryButton>
+                <SecondaryButton onClick={handleSubmit}>Register</SecondaryButton>
+                <SecondaryButton type="cancel" onClick={() => navigate("/")}>Cancel</SecondaryButton>
             </div>
         </div>
     );
