@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./utils/InputField.jsx";
 import SecondaryButton from "./utils/SecondaryButton.jsx";
+import {validateUser} from "../validation/validateUser.js";
 
 export default function Register() {
     const [form, setForm] = useState({
@@ -22,6 +23,10 @@ export default function Register() {
     };
 
     const handleSubmit = async () => {
+        const validationResult = validateUser(form);
+        if(Object.keys(validationResult) > 0){
+            setErrors({validationResult});
+        }
         setError(null);
         setErrors({});
 
