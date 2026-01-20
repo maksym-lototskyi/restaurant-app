@@ -6,19 +6,7 @@ In order to change the database credentials, make sure to connect to a mysql ser
 
 ```
 
-docker run --name mysql-db \
-
--e MYSQL_ROOT_PASSWORD=root \
-
-  -e MYSQL_DATABASE=restaurant \
-
-  -e MYSQL_USER=app \
-
-  -e MYSQL_PASSWORD=app \
-
-  -p 3306:3306 \
-
-  -d mysql:8.0
+docker run --name mysql-db -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=restaurant -e MYSQL_USER=app -e MYSQL_PASSWORD=app -p 3306:3306 -d mysql:8.0
 
 ```
 
@@ -39,5 +27,6 @@ DATASOURCE_PASSWORD=app
 
 
 Finally, your database connection should be set and ready.
+
 
 
